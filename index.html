@@ -391,7 +391,7 @@ let _cbIdx = 0;
  
 function gasCall(params, timeoutMs = 30000) {
   return new Promise((resolve, reject) => {
-    if (!GAS_URL || GAS_URL === 'WPISZ_TU_URL_SWOJEGO_APPS_SCRIPT') {
+    if (!GAS_URL || GAS_URL === 'https://script.google.com/macros/s/AKfycbxfWAOrbflD_AZSTFnW2hmQu_FWJGfUtpiyqDJbe25Ou-U7uDqvYReuahYT-_Xnt1cSZw/exec') {
       return reject(new Error('Skonfiguruj GAS_URL w pliku HTML'));
     }
     const cbName = '__gasCb' + (++_cbIdx);
@@ -469,7 +469,7 @@ async function doLogin() {
     showLoginErr('Wpisz login i hasło');
     return;
   }
-  if (!GAS_URL || GAS_URL === 'WPISZ_TU_URL_SWOJEGO_APPS_SCRIPT') {
+  if (!GAS_URL || GAS_URL === 'https://script.google.com/macros/s/AKfycbxfWAOrbflD_AZSTFnW2hmQu_FWJGfUtpiyqDJbe25Ou-U7uDqvYReuahYT-_Xnt1cSZw/exec') {
     showLoginErr('Skonfiguruj najpierw GAS_URL w pliku HTML');
     return;
   }
