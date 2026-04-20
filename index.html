@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lodziarnia Manager</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f5f4f0;color:#2c2c2a;min-height:100vh}
+.header{background:#fff;border-bottom:1px solid #e0ded8;padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.header h1{font-size:18px;font-weight:600;color:#1D9E75}
+.header span{font-size:13px;color:#888780}
+.sync-status{margin-left:auto;display:flex;align-items:center;gap:.5rem;font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid #e0ded8;background:#f5f4f0;cursor:pointer;transition:all .2s}
+.sync-status.ok{color:#0F6E56;border-color:#9FE1CB;background:#E1F5EE}
+.sync-status.err{color:#A32D2D;border-color:#F7C1C1;background:#FCEBEB}
+.sync-status.busy{color:#854F0B;border-color:#FAC775;background:#FAEEDA}
+.dot-anim{width:8px;height:8px;border-radius:50%;background:currentColor;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.nav{display:flex;gap:2px;padding:.75rem 1.5rem 0;background:#fff;border-bottom:1px solid #e0ded8;flex-wrap:wrap}
+.tab{padding:9px 18px;border-radius:8px 8px 0 0;font-size:13px;font-weight:500;cursor:pointer;background:#f5f4f0;color:#5F5E5A;border:none;transition:all .15s;margin-bottom:-1px;border-bottom:1px solid #e0ded8}
+.tab.active{background:#fff;color:#2c2c2a;border:1px solid #e0ded8;border-bottom:1px solid #fff}
+.main{padding:1.5rem;max-width:1100px;margin:0 auto}
+.panel{display:none}
+.panel.active{display:block}
+h2{font-size:17px;font-weight:600;margin-bottom:1rem;color:#2c2c2a}
+h3{font-size:14px;font-weight:600;margin-bottom:.6rem;color:#444441}
+.card{background:#fff;border:1px solid #e0ded8;border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1rem}
+.met{background:#f5f4f0;border-radius:10px;padding:.85rem 1rem}
+.met .l{font-size:11px;color:#888780;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.met .v{font-size:22px;font-weight:600;color:#2c2c2a}
+.met .s{font-size:11px;color:#B4B2A9;margin-top:2px}
+label{font-size:12px;color:#5F5E5A;display:block;margin-bottom:3px;font-weight:500}
+input,select{width:100%;height:34px;font-size:13px;border-radius:8px;border:1px solid #D3D1C7;padding:0 10px;background:#fff;color:#2c2c2a;transition:border .15s}
+input:focus,select:focus{outline:none;border-color:#1D9E75;box-shadow:0 0 0 3px rgba(29,158,117,.12)}
+.row{display:flex;gap:.6rem;align-items:flex-end;flex-wrap:wrap}
+.fg{flex:1;min-width:100px}
+.btn{height:34px;padding:0 16px;border-radius:8px;border:1px solid #D3D1C7;background:#fff;color:#2c2c2a;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.btn:hover{background:#f5f4f0}
+.btn-g{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.btn-g:hover{background:#0F6E56}
+.btn-r{background:#E24B4A;color:#fff;border-color:#E24B4A;height:26px;padding:0 8px;font-size:11px;border-radius:6px}
+.btn-r:hover{background:#A32D2D}
+.div{height:1px;background:#f0eed8;margin:1rem 0}
+table{width:100%;font-size:13px;border-collapse:collapse}
+th{font-size:11px;color:#888780;font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid #e0ded8;text-transform:uppercase;letter-spacing:.4px}
+td{padding:8px 8px;border-bottom:1px solid #f0eed8;color:#2c2c2a;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafaf8}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;flex-shrink:0}
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.3px}
+.tg{background:#E1F5EE;color:#0F6E56}
+.ta{background:#FAEEDA;color:#854F0B}
+.tr{background:#FCEBEB;color:#A32D2D}
+.tb{background:#E6F1FB;color:#185FA5}
+.bar{height:5px;border-radius:3px;background:#e0ded8;margin-top:4px;overflow:hidden}
+.bfill{height:100%;border-radius:3px;transition:width .4s}
+.empty{text-align:center;padding:2rem;color:#B4B2A9;font-size:13px}
+.sep{height:1px;background:#f0eed8;margin:.5rem 0}
+.alert-warn{background:#FAEEDA;border:1px solid #EF9F27;border-radius:8px;padding:.6rem 1rem;font-size:13px;color:#854F0B;margin-bottom:.75rem}
+.setup-box{background:#fff;border:2px solid #1D9E75;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.setup-box h3{color:#0F6E56;margin-bottom:1rem}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#1D9E75;color:#fff;font-size:11px;font-weight:600;flex-shrink:0;margin-right:8px}
+.step-row{display:flex;align-items:flex-start;gap:4px;margin-bottom:.75rem;font-size:13px;line-height:1.5}
+code{background:#f0eed8;padding:1px 5px;border-radius:4px;font-family:monospace;font-size:12px}
+.input-row{display:flex;gap:.5rem;align-items:flex-end;margin-top:.75rem}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span style="font-size:22px">🍦</span>
+  <h1>Lodziarnia Manager</h1>
+  <span id="cur-date"></span>
+  <div class="sync-status" id="sync-btn" onclick="manualSync()">
+    <span>☁️</span>
+    <span id="sync-label">Nie skonfigurowano</span>
+  </div>
+</div>
+
+<div class="nav" id="nav">
+  <button class="tab active" onclick="sw('setup')">⚙️ Konfiguracja</button>
+  <button class="tab" onclick="sw('delivery')">📦 Dostawy</button>
+  <button class="tab" onclick="sw('stock')">🧊 Magazyn</button>
+  <button class="tab" onclick="sw('sales')">💰 Sprzedaż</button>
+  <button class="tab" onclick="sw('employees')">👥 Pracownicy</button>
+  <button class="tab" onclick="sw('summary')">📊 Wyniki</button>
+</div>
+
+<div class="main">
+
+<!-- KONFIGURACJA -->
+<div id="p-setup" class="panel active">
+  <h2>Konfiguracja — Google Sheets</h2>
+
+  <div class="setup-box">
+    <h3>📋 Krok 1 — Utwórz Google Apps Script (backend)</h3>
+    <div class="step-row"><span class="step-num">1</span>Otwórz <a href="https://script.google.com" target="_blank" style="color:#1D9E75">script.google.com</a> i kliknij <b>Nowy projekt</b></div>
+    <div class="step-row"><span class="step-num">2</span>Usuń domyślny kod i wklej poniższy skrypt:</div>
+    <div style="background:#f0eed8;border-radius:8px;padding:1rem;font-size:11px;font-family:monospace;line-height:1.7;margin:.5rem 0;overflow-x:auto;white-space:pre">const SHEET_ID = SpreadsheetApp.create("LodzharniaDB").getId();
+
+function doGet(e) {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName(e.parameter.sheet) ||
+                ss.insertSheet(e.parameter.sheet);
+  const data = sheet.getDataRange().getValues();
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const payload = JSON.parse(e.postData.contents);
+  const sheet = ss.getSheetByName(payload.sheet) ||
+                ss.insertSheet(payload.sheet);
+  if (payload.action === "write") {
+    sheet.clearContents();
+    if (payload.data && payload.data.length > 0) {
+      sheet.getRange(1, 1, payload.data.length, payload.data[0].length)
+           .setValues(payload.data);
+    }
+  }
+  return ContentService
+    .createTextOutput(JSON.stringify({ok:true}))
+    .setMimeType(ContentService.MimeType.JSON);
+}</div>
+    <div class="step-row"><span class="step-num">3</span>Kliknij <b>Wdróż → Nowe wdrożenie</b>, wybierz typ <b>Aplikacja internetowa</b></div>
+    <div class="step-row"><span class="step-num">4</span>Ustaw "Kto ma dostęp" na <b>Wszyscy</b>, kliknij <b>Wdróż</b> i skopiuj URL</div>
+  </div>
+
+  <div class="setup-box">
+    <h3>🔗 Krok 2 — Wklej URL wdrożenia tutaj</h3>
+    <div class="input-row">
+      <div class="fg">
+        <label>URL Google Apps Script</label>
+        <input id="cfg-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" type="url">
+      </div>
+      <button class="btn btn-g" onclick="saveConfig()">Zapisz i testuj połączenie</button>
+    </div>
+    <div id="cfg-status" style="margin-top:.75rem;font-size:13px"></div>
+  </div>
+
+  <div class="setup-box" style="border-color:#e0ded8">
+    <h3>💾 Zarządzanie danymi</h3>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+      <button class="btn btn-g" onclick="syncAll()">☁️ Wyślij wszystkie dane do Sheets</button>
+      <button class="btn" onclick="loadAll()">⬇️ Wczytaj dane ze Sheets</button>
+      <button class="btn" onclick="exportLocal()">📁 Eksport lokalny (JSON)</button>
+      <button class="btn" onclick="importLocal()">📂 Import lokalny (JSON)</button>
+      <input type="file" id="imp-file" accept=".json" style="display:none" onchange="doImport(this)">
+    </div>
+    <div id="data-status" style="margin-top:.75rem;font-size:13px;color:#5F5E5A"></div>
+  </div>
+
+  <div class="card" style="border-color:#e0ded8">
+    <h3>ℹ️ Jak to działa?</h3>
+    <div style="font-size:13px;line-height:1.8;color:#5F5E5A">
+      <p>Dane są przechowywane lokalnie w przeglądarce (<code>localStorage</code>) i automatycznie synchronizowane z Google Sheets co 5 minut lub przy każdym zapisie.</p>
+      <p style="margin-top:.5rem">Google Sheets działa jako baza danych — możesz tam przeglądać i edytować dane jak w Excelu. Każda kategoria (dostawy, sprzedaż, pracownicy...) to osobna zakładka w arkuszu.</p>
+      <p style="margin-top:.5rem">Aby udostępnić aplikację, po prostu podziel się plikiem HTML. Każdy użytkownik musi tylko raz wpisać URL swojego skryptu.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DOSTAWY -->
+<div id="p-delivery" class="panel">
+  <h2>Nowa dostawa</h2>
+  <div class="card">
+    <div class="row" style="margin-bottom:.75rem">
+      <div class="fg"><label>Data dostawy</label><input type="date" id="d-date"></div>
+      <div class="fg"><label>Dostawca</label><input id="d-sup" placeholder="np. IceCo Sp. z o.o."></div>
+      <div class="fg"><label>Nr faktury</label><input id="d-inv" placeholder="FV/2024/001"></div>
+    </div>
+    <div id="d-items"></div>
+    <button class="btn" style="margin-top:.5rem" onclick="addDItem()">+ Dodaj pozycję</button>
+    <div class="div"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-size:13px;color:#5F5E5A">Koszt łączny: </span>
+        <span id="d-tot" style="font-size:18px;font-weight:600;color:#2c2c2a">0,00 zł</span>
+      </div>
+      <button class="btn btn-g" onclick="saveDelivery()">✓ Zapisz dostawę</button>
+    </div>
+  </div>
+  <h2>Historia dostaw</h2>
+  <div id="d-hist"></div>
+</div>
+
+<!-- MAGAZYN -->
+<div id="p-stock" class="panel">
+  <h2>Stan magazynowy</h2>
+  <div id="st-alerts"></div>
+  <div class="g4" id="st-met"></div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Smak</th><th>Stan (kg)</th><th>Próg alarmu</th><th>Cena baz.</th><th>Wart. stanu</th><th>Status</th><th>Korekta</th></tr></thead>
+      <tbody id="st-body"></tbody>
+    </table>
+  </div>
+  <div class="div"></div>
+  <h3>Dodaj nowy smak</h3>
+  <div class="card">
+    <div class="row">
+      <div class="fg"><label>Nazwa smaku</label><input id="s-name" placeholder="np. Pistacja"></div>
+      <div class="fg"><label>Kolor</label><input id="s-color" type="color" value="#1D9E75" style="height:34px;padding:2px;cursor:pointer"></div>
+      <div class="fg"><label>Cena baz. (zł/kg)</label><input type="number" id="s-price" placeholder="28" step="0.5"></div>
+      <div class="fg"><label>Próg alarmu (kg)</label><input type="number" id="s-thr" placeholder="3"></div>
+      <div><label>&nbsp;</label><button class="btn btn-g" onclick="addFlavor()">Dodaj smak</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- SPRZEDAŻ -->
+<div id="p-sales" class="panel">
+  <h2>Rejestracja sprzedaży</h2>
+  <div class="card">
+    <div class="row" style="margin-bottom:.75rem">
+      <div class="fg"><label>Data</label><input type="date" id="sl-date"></div>
+      <div class="fg"><label>Sprzedawca</label><select id="sl-seller"></select></div>
+      <div class="fg"><label>Smak</label><select id="sl-flav"></select></div>
+    </div>
+    <div class="row">
+      <div class="fg"><label>Ilość (kg)</label><input type="number" id="sl-qty" placeholder="0.5" step="0.1" min="0.01"></div>
+      <div class="fg"><label>Cena sprzedaży (zł/kg)</label><input type="number" id="sl-price" placeholder="40" step="0.5"></div>
+      <div class="fg"><label>Uwagi</label><input id="sl-note" placeholder="Opcjonalnie"></div>
+      <div><label>&nbsp;</label><button class="btn btn-g" onclick="addSale()">+ Dodaj</button></div>
+    </div>
+  </div>
+  <div class="g4" id="sl-met"></div>
+  <h2>Sprzedaż — dzisiaj</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>Godz.</th><th>Sprzedawca</th><th>Smak</th><th>Ilość</th><th>Cena/kg</th><th>Wartość</th><th>Uwagi</th><th></th></tr></thead>
+      <tbody id="sl-today"></tbody>
+    </table>
+  </div>
+  <div class="div"></div>
+  <h2>Statystyki sprzedaży</h2>
+  <div class="g2">
+    <div class="card"><h3>Według smaku (łącznie)</h3><div id="fl-stat"></div></div>
+    <div class="card"><h3>Według sprzedawcy (łącznie)</h3><div id="se-stat"></div></div>
+  </div>
+  <div class="card" style="margin-top:0">
+    <h3>Sprzedaż dzienna — historia</h3>
+    <table>
+      <thead><tr><th>Data</th><th>Transakcji</th><th>Sprzedano (kg)</th><th>Przychód</th></tr></thead>
+      <tbody id="daily-hist"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PRACOWNICY -->
+<div id="p-employees" class="panel">
+  <h2>Pracownicy</h2>
+  <div class="g2">
+    <div class="card">
+      <h3>Dodaj pracownika</h3>
+      <div style="margin-bottom:.6rem"><label>Imię i nazwisko</label><input id="e-name" placeholder="Jan Kowalski"></div>
+      <div style="margin-bottom:.6rem"><label>Stawka godzinowa (zł/h)</label><input type="number" id="e-rate" placeholder="25.00" step="0.5"></div>
+      <button class="btn btn-g" onclick="addEmp()">Dodaj pracownika</button>
+    </div>
+    <div class="card">
+      <h3>Rejestracja czasu pracy</h3>
+      <div style="margin-bottom:.5rem"><label>Pracownik</label><select id="w-emp"></select></div>
+      <div style="margin-bottom:.5rem"><label>Data</label><input type="date" id="w-date"></div>
+      <div class="row" style="margin-bottom:.5rem">
+        <div class="fg"><label>Od (godz.)</label><input type="time" id="w-from"></div>
+        <div class="fg"><label>Do (godz.)</label><input type="time" id="w-to"></div>
+      </div>
+      <button class="btn btn-g" onclick="addWork()">Zapisz czas pracy</button>
+    </div>
+  </div>
+  <h2>Lista pracowników i koszty</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>Pracownik</th><th>Stawka</th><th>Godz. (ten mies.)</th><th>Koszt (ten mies.)</th><th>Godz. łącznie</th><th>Koszt łącznie</th><th></th></tr></thead>
+      <tbody id="e-body"></tbody>
+    </table>
+  </div>
+  <h2>Rejestr czasu pracy</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>Data</th><th>Pracownik</th><th>Od</th><th>Do</th><th>Godz.</th><th>Koszt</th><th></th></tr></thead>
+      <tbody id="w-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- WYNIKI -->
+<div id="p-summary" class="panel">
+  <h2>Podsumowanie finansowe</h2>
+  <div class="g4" id="su-met"></div>
+  <div class="g2">
+    <div class="card"><h3>Koszty wg kategorii</h3><div id="su-costs"></div></div>
+    <div class="card"><h3>Ostatnie transakcje</h3><div id="su-tx"></div></div>
+  </div>
+  <div class="card">
+    <h3>Sprzedaż dzienna (ostatnie 10 dni)</h3>
+    <table>
+      <thead><tr><th>Data</th><th>Transakcji</th><th>Sprzedano (kg)</th><th>Przychód</th><th>Koszty dostawy</th><th>Koszty pracy</th></tr></thead>
+      <tbody id="su-daily"></tbody>
+    </table>
+  </div>
+</div>
+
+</div>
+
+<script>
+const TD = new Date().toISOString().split('T')[0];
+document.getElementById('cur-date').textContent = new Date().toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+// ============ STATE ============
+const DEFAULT_FLAVORS = [
+  {id:1,name:'Wanilia',color:'#D4AA20',price:22,stock:12,thr:4},
+  {id:2,name:'Czekolada',color:'#6B3A2A',price:24,stock:8,thr:4},
+  {id:3,name:'Truskawka',color:'#E8507A',price:26,stock:5.5,thr:3},
+  {id:4,name:'Mięta',color:'#1D9E75',price:28,stock:3,thr:3},
+  {id:5,name:'Pistacja',color:'#7BA05B',price:35,stock:7,thr:2},
+];
+
+let S = {
+  flavors: JSON.parse(JSON.stringify(DEFAULT_FLAVORS)),
+  deliveries:[], sales:[], employees:[], works:[],
+  nf:6, nd:1, ns:1, ne:1, nw:1
+};
+
+let GAS_URL = '';
+let syncTimer = null;
+let dItems = [];
+
+// ============ LOCALSTORAGE ============
+function saveLocal() {
+  try {
+    localStorage.setItem('lodziarnia_data', JSON.stringify(S));
+    localStorage.setItem('lodziarnia_url', GAS_URL);
+  } catch(e) { console.warn('localStorage save failed', e); }
+}
+
+function loadLocal() {
+  try {
+    const d = localStorage.getItem('lodziarnia_data');
+    const u = localStorage.getItem('lodziarnia_url');
+    if (d) S = JSON.parse(d);
+    if (u) {
+      GAS_URL = u;
+      document.getElementById('cfg-url').value = u;
+      setSyncStatus('ok', 'Połączono');
+    }
+  } catch(e) { console.warn('localStorage load failed', e); }
+}
+
+// ============ GOOGLE SHEETS SYNC ============
+function setSyncStatus(type, txt) {
+  const el = document.getElementById('sync-btn');
+  el.className = 'sync-status ' + type;
+  document.getElementById('sync-label').textContent = txt;
+}
+
+async function gasRequest(method, body) {
+  if (!GAS_URL) throw new Error('Brak URL');
+  const opts = { method, mode: 'no-cors' };
+  if (method === 'POST') {
+    opts.headers = { 'Content-Type': 'text/plain' };
+    opts.body = JSON.stringify(body);
+  }
+  await fetch(GAS_URL + (method === 'GET' ? '?' + new URLSearchParams(body) : ''), opts);
+}
+
+// Serialize data to 2D array for Sheets
+function sheetRows(key) {
+  const rows = [];
+  switch(key) {
+    case 'flavors':
+      rows.push(['id','name','color','price','stock','thr']);
+      S.flavors.forEach(f => rows.push([f.id,f.name,f.color,f.price,f.stock,f.thr]));
+      break;
+    case 'sales':
+      rows.push(['id','date','time','seller','fid','qty','price','tot','note']);
+      S.sales.forEach(s => rows.push([s.id,s.date,s.time,s.seller,s.fid,s.qty,s.price,s.tot,s.note||'']));
+      break;
+    case 'deliveries':
+      rows.push(['id','date','sup','inv','tot','items_json']);
+      S.deliveries.forEach(d => rows.push([d.id,d.date,d.sup,d.inv||'',d.tot,JSON.stringify(d.items)]));
+      break;
+    case 'employees':
+      rows.push(['id','name','rate']);
+      S.employees.forEach(e => rows.push([e.id,e.name,e.rate]));
+      break;
+    case 'works':
+      rows.push(['id','eid','date','fr','to','h']);
+      S.works.forEach(w => rows.push([w.id,w.eid,w.date,w.fr,w.to,w.h]));
+      break;
+    case 'meta':
+      rows.push(['key','value']);
+      rows.push(['nf',S.nf],['nd',S.nd],['ns',S.ns],['ne',S.ne],['nw',S.nw]);
+      break;
+  }
+  return rows;
+}
+
+async function syncAll() {
+  if (!GAS_URL) { alert('Najpierw skonfiguruj URL w zakładce Konfiguracja'); return; }
+  setSyncStatus('busy', 'Synchronizuję…');
+  const el = document.getElementById('sync-btn');
+  try {
+    const sheets = ['flavors','sales','deliveries','employees','works','meta'];
+    for (const s of sheets) {
+      await gasRequest('POST', { action:'write', sheet: s, data: sheetRows(s) });
+      await new Promise(r => setTimeout(r, 300));
+    }
+    setSyncStatus('ok', 'Zsynchronizowano ✓');
+    const st = document.getElementById('data-status');
+    if (st) st.innerHTML = '<span style="color:#0F6E56">✓ Dane wysłane do Google Sheets — ' + new Date().toLocaleTimeString('pl-PL') + '</span>';
+    saveLocal();
+  } catch(e) {
+    setSyncStatus('err', 'Błąd synchronizacji');
+    console.error(e);
+  }
+}
+
+async function manualSync() {
+  await syncAll();
+}
+
+function scheduleSync() {
+  if (syncTimer) clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => { if (GAS_URL) syncAll(); }, 5 * 60 * 1000);
+}
+
+async function saveConfig() {
+  const url = document.getElementById('cfg-url').value.trim();
+  if (!url) { alert('Podaj URL'); return; }
+  GAS_URL = url;
+  localStorage.setItem('lodziarnia_url', url);
+  setSyncStatus('busy', 'Testuje…');
+  document.getElementById('cfg-status').innerHTML = '<span style="color:#854F0B">⏳ Testuję połączenie…</span>';
+  try {
+    await fetch(url + '?sheet=meta', { mode: 'no-cors' });
+    setSyncStatus('ok', 'Połączono ✓');
+    document.getElementById('cfg-status').innerHTML = '<span style="color:#0F6E56">✓ Połączenie działa! Możesz teraz korzystać z aplikacji.</span>';
+    scheduleSync();
+  } catch(e) {
+    setSyncStatus('err', 'Błąd połączenia');
+    document.getElementById('cfg-status').innerHTML = '<span style="color:#A32D2D">✗ Błąd: ' + e.message + '. Sprawdź URL i uprawnienia skryptu.</span>';
+  }
+}
+
+// ============ LOCAL EXPORT/IMPORT ============
+function exportLocal() {
+  const blob = new Blob([JSON.stringify(S, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'lodziarnia_backup_' + TD + '.json';
+  a.click();
+}
+
+function importLocal() { document.getElementById('imp-file').click(); }
+
+function doImport(inp) {
+  const f = inp.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      if (d.flavors && d.sales !== undefined) {
+        if (confirm('To zastąpi wszystkie obecne dane. Kontynuować?')) {
+          S = d; saveLocal();
+          document.getElementById('data-status').innerHTML = '<span style="color:#0F6E56">✓ Dane zaimportowane!</span>';
+          rSelects();
+        }
+      } else { alert('Nieprawidłowy format pliku'); }
+    } catch(err) { alert('Błąd odczytu pliku: ' + err.message); }
+  };
+  r.readAsText(f);
+}
+
+async function loadAll() {
+  if (!GAS_URL) { alert('Najpierw skonfiguruj URL'); return; }
+  setSyncStatus('busy', 'Wczytuje…');
+  document.getElementById('data-status').innerHTML = '<span style="color:#854F0B">⏳ Wczytuję z Google Sheets…</span>';
+  try {
+    // Pobierz dane przez proxy (no-cors nie zwraca body — potrzebny inny endpoint)
+    setSyncStatus('ok', 'OK');
+    document.getElementById('data-status').innerHTML = `
+      <span style="color:#854F0B">⚠️ Ze względów bezpieczeństwa przeglądarki, wczytywanie wymaga otwarcia Sheets bezpośrednio.</span><br>
+      <span style="font-size:12px;color:#5F5E5A">Użyj "Wyślij dane" aby nadpisać Sheets, albo edytuj tam ręcznie i użyj Eksport/Import JSON jako backup.</span>`;
+  } catch(e) { setSyncStatus('err', 'Błąd'); }
+}
+
+// ============ HELPERS ============
+function f2(n){return n.toFixed(2).replace('.',',')+' zł'}
+function fD(d){const[y,m,dd]=d.split('-');return dd+'.'+m+'.'+y}
+function fColor(id){const f=S.flavors.find(x=>x.id==id);return f?f.color:'#888'}
+function fName(id){const f=S.flavors.find(x=>x.id==id);return f?f.name:'—'}
+function sName(id){if(id==='own') return 'Właściciel';const e=S.employees.find(x=>x.id==id);return e?e.name:'Nieznany'}
+function mKey(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')}
+
+function sw(n){
+  ['setup','delivery','stock','sales','employees','summary'].forEach((t,i)=>{
+    document.querySelectorAll('.tab')[i].classList.toggle('active',t===n);
+    document.getElementById('p-'+t).classList.toggle('active',t===n);
+  });
+  if(n==='stock') rStock();
+  if(n==='sales') rSales();
+  if(n==='employees') rEmps();
+  if(n==='summary') rSummary();
+  if(n==='delivery') rDHist();
+}
+
+// ============ DOSTAWY ============
+function addDItem(){dItems.push({id:Date.now(),fid:'',qty:0,ppk:0});rDForm()}
+
+function rDForm(){
+  const c=document.getElementById('d-items');
+  if(!dItems.length){c.innerHTML='<div class="empty">Brak pozycji. Kliknij "Dodaj pozycję"</div>';document.getElementById('d-tot').textContent='0,00 zł';return}
+  let tot=0;
+  c.innerHTML=dItems.map((it,i)=>{
+    const v=Math.round(it.qty*it.ppk*100)/100;tot+=v;
+    return `<div class="row" style="margin-bottom:.5rem;background:#fafaf8;padding:.5rem;border-radius:8px">
+      <div class="fg"><label>Smak</label>
+        <select onchange="setDI(${i},'fid',+this.value)">
+          <option value="">-- Wybierz smak --</option>
+          ${S.flavors.map(f=>`<option value="${f.id}"${f.id==it.fid?' selected':''}>${f.name} (baz. ${f.price.toFixed(2)} zł/kg, stan: ${f.stock.toFixed(1)}kg)</option>`).join('')}
+        </select></div>
+      <div class="fg"><label>Ilość (kg)</label><input type="number" value="${it.qty||''}" placeholder="0" step="0.1" onchange="setDI(${i},'qty',+this.value)"></div>
+      <div class="fg"><label>Cena zakupu (zł/kg)</label><input type="number" value="${it.ppk||''}" placeholder="0" step="0.5" onchange="setDI(${i},'ppk',+this.value)"></div>
+      <div style="font-size:13px;font-weight:600;min-width:80px;padding-bottom:2px;align-self:flex-end">${f2(v)}</div>
+      <div style="align-self:flex-end"><button class="btn btn-r" onclick="remDI(${i})">✕ Usuń</button></div>
+    </div>`;
+  }).join('');
+  document.getElementById('d-tot').textContent=f2(tot);
+}
+function setDI(i,k,v){dItems[i][k]=v;rDForm()}
+function remDI(i){dItems.splice(i,1);rDForm()}
+
+function saveDelivery(){
+  const date=document.getElementById('d-date').value||TD;
+  const sup=document.getElementById('d-sup').value||'Nieznany dostawca';
+  const inv=document.getElementById('d-inv').value;
+  if(!dItems.length){alert('Dodaj przynajmniej jedną pozycję');return}
+  if(dItems.some(x=>!x.fid||x.qty<=0)){alert('Uzupełnij smak i ilość dla każdej pozycji');return}
+  let tot=0;
+  dItems.forEach(it=>{
+    tot+=it.qty*it.ppk;
+    const f=S.flavors.find(x=>x.id==it.fid);
+    if(f) f.stock=Math.round((f.stock+it.qty)*100)/100;
+  });
+  S.deliveries.push({id:S.nd++,date,sup,inv,items:[...dItems],tot});
+  dItems=[];
+  document.getElementById('d-sup').value='';
+  document.getElementById('d-inv').value='';
+  saveLocal();
+  scheduleSync();
+  rDForm();rDHist();
+  if(GAS_URL) syncAll();
+  alert('✓ Dostawa zapisana! Stan magazynowy został zaktualizowany.');
+}
+
+function rDHist(){
+  const el=document.getElementById('d-hist');
+  if(!S.deliveries.length){el.innerHTML='<div class="card"><div class="empty">Brak historii dostaw</div></div>';return}
+  el.innerHTML=[...S.deliveries].sort((a,b)=>b.date.localeCompare(a.date)).map(d=>`
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem">
+        <div><span style="font-weight:600;font-size:15px">${d.sup}</span>${d.inv?`<span style="font-size:12px;color:#888780;margin-left:8px">${d.inv}</span>`:''}</div>
+        <div style="text-align:right"><div style="font-size:15px;font-weight:600">${f2(d.tot)}</div><div style="font-size:12px;color:#888780">${fD(d.date)}</div></div>
+      </div>
+      <table><thead><tr><th>Smak</th><th>Ilość</th><th>Cena zakupu/kg</th><th>Wartość</th></tr></thead>
+      <tbody>${d.items.map(it=>`<tr><td><span class="dot" style="background:${fColor(it.fid)}"></span><b>${fName(it.fid)}</b></td><td>${it.qty} kg</td><td>${f2(it.ppk)}</td><td>${f2(it.qty*it.ppk)}</td></tr>`).join('')}</tbody></table>
+    </div>`).join('');
+}
+
+// ============ MAGAZYN ============
+function addFlavor(){
+  const n=document.getElementById('s-name').value.trim();
+  const c=document.getElementById('s-color').value||'#888780';
+  const p=+document.getElementById('s-price').value;
+  const t=+document.getElementById('s-thr').value||3;
+  if(!n||!p){alert('Podaj nazwę i cenę bazową');return}
+  S.flavors.push({id:S.nf++,name:n,color:c,price:p,stock:0,thr:t});
+  document.getElementById('s-name').value='';
+  document.getElementById('s-price').value='';
+  document.getElementById('s-thr').value='';
+  saveLocal(); scheduleSync();
+  rStock();rSelects();
+}
+
+function rStock(){
+  const tot=S.flavors.reduce((s,f)=>s+f.stock,0);
+  const low=S.flavors.filter(f=>f.stock<=f.thr&&f.stock>0);
+  const empty=S.flavors.filter(f=>f.stock===0);
+  const alerts=document.getElementById('st-alerts');
+  let alertHtml='';
+  if(empty.length) alertHtml+=`<div class="alert-warn">⚠️ Brak towaru: ${empty.map(f=>`<b>${f.name}</b>`).join(', ')}</div>`;
+  if(low.length) alertHtml+=`<div class="alert-warn" style="background:#E6F1FB;border-color:#85B7EB;color:#185FA5">ℹ️ Niski stan: ${low.map(f=>`<b>${f.name}</b> (${f.stock.toFixed(1)} kg)`).join(', ')}</div>`;
+  alerts.innerHTML=alertHtml;
+  document.getElementById('st-met').innerHTML=`
+    <div class="met"><div class="l">Łączny zapas</div><div class="v">${tot.toFixed(1)} kg</div></div>
+    <div class="met"><div class="l">Smaków w ofercie</div><div class="v">${S.flavors.length}</div></div>
+    <div class="met"><div class="l">Alerty (niski/brak)</div><div class="v" style="color:${(low.length+empty.length)?'#E24B4A':'#1D9E75'}">${low.length+empty.length}</div></div>
+    <div class="met"><div class="l">Wartość magazynu</div><div class="v">${f2(S.flavors.reduce((s,f)=>s+f.stock*f.price,0))}</div></div>`;
+  document.getElementById('st-body').innerHTML=S.flavors.map(f=>{
+    const pct=Math.min(100,Math.round(f.stock/(Math.max(f.thr*4,1))*100));
+    const st=f.stock===0?`<span class="tag tr">Brak</span>`:f.stock<=f.thr?`<span class="tag ta">Niski</span>`:`<span class="tag tg">OK</span>`;
+    const fc=f.stock===0?'#E24B4A':f.stock<=f.thr?'#EF9F27':f.color;
+    return `<tr>
+      <td><span class="dot" style="background:${f.color}"></span><b>${f.name}</b></td>
+      <td>${f.stock.toFixed(1)} kg<div class="bar"><div class="bfill" style="width:${pct}%;background:${fc}"></div></div></td>
+      <td>${f.thr} kg</td><td>${f2(f.price)}/kg</td><td>${f2(f.stock*f.price)}</td><td>${st}</td>
+      <td style="white-space:nowrap">
+        <input type="number" id="adj-${f.id}" step="0.1" placeholder="±kg" style="width:75px;height:28px;font-size:12px;display:inline-block">
+        <button class="btn" style="height:28px;font-size:12px;padding:0 8px;margin-left:3px" onclick="adjStock(${f.id})">Koryguj</button>
+      </td></tr>`;
+  }).join('');
+}
+
+function adjStock(id){
+  const inp=document.getElementById('adj-'+id);
+  const v=parseFloat(inp.value);
+  if(isNaN(v)){alert('Podaj wartość korekty (np. 2.5 lub -1)');return}
+  const f=S.flavors.find(x=>x.id===id);
+  f.stock=Math.max(0,Math.round((f.stock+v)*100)/100);
+  inp.value='';
+  saveLocal(); scheduleSync();
+  rStock();
+}
+
+// ============ SELECTS ============
+function rSelects(){
+  const ss=document.getElementById('sl-seller');
+  const cs=ss.value;
+  ss.innerHTML=`<option value="own">Właściciel</option>`+S.employees.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+  if(cs) ss.value=cs;
+  const sf=document.getElementById('sl-flav');
+  const cf=sf.value;
+  sf.innerHTML=`<option value="">-- Wybierz smak --</option>`+S.flavors.map(f=>`<option value="${f.id}">${f.name} (${f.stock.toFixed(1)} kg w mag.)</option>`).join('');
+  if(cf) sf.value=cf;
+  const we=document.getElementById('w-emp');
+  const ce=we.value;
+  we.innerHTML=`<option value="">-- Wybierz pracownika --</option>`+S.employees.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+  if(ce) we.value=ce;
+}
+
+// ============ SPRZEDAŻ ============
+function addSale(){
+  const date=document.getElementById('sl-date').value||TD;
+  const seller=document.getElementById('sl-seller').value;
+  const fid=+document.getElementById('sl-flav').value;
+  const qty=+document.getElementById('sl-qty').value;
+  const price=+document.getElementById('sl-price').value;
+  const note=document.getElementById('sl-note').value;
+  if(!fid||qty<=0||price<=0){alert('Uzupełnij smak, ilość i cenę');return}
+  const f=S.flavors.find(x=>x.id===fid);
+  if(!f) return;
+  if(f.stock<qty){alert(`Niewystarczający stan!\nDostępne: ${f.stock.toFixed(1)} kg\nZamawiane: ${qty} kg`);return}
+  const now=new Date();
+  const time=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  f.stock=Math.round((f.stock-qty)*100)/100;
+  S.sales.push({id:S.ns++,date,time,seller,fid,qty,price,tot:Math.round(qty*price*100)/100,note});
+  document.getElementById('sl-qty').value='';
+  document.getElementById('sl-note').value='';
+  saveLocal(); scheduleSync();
+  rSales();
+  if(GAS_URL) syncAll();
+}
+
+function delSale(id){
+  if(!confirm('Usunąć ten wpis sprzedaży?')) return;
+  const s=S.sales.find(x=>x.id===id);
+  if(!s) return;
+  const f=S.flavors.find(x=>x.id===s.fid);
+  if(f) f.stock=Math.round((f.stock+s.qty)*100)/100;
+  S.sales=S.sales.filter(x=>x.id!==id);
+  saveLocal(); scheduleSync();
+  rSales();
+}
+
+function rSales(){
+  rSelects();
+  const ts=S.sales.filter(s=>s.date===TD);
+  const totD=ts.reduce((s,x)=>s+x.tot,0);
+  const totAll=S.sales.reduce((s,x)=>s+x.tot,0);
+  const totQty=S.sales.reduce((s,x)=>s+x.qty,0);
+  document.getElementById('sl-met').innerHTML=`
+    <div class="met"><div class="l">Przychód dziś</div><div class="v" style="color:#1D9E75">${f2(totD)}</div><div class="s">${ts.length} transakcji</div></div>
+    <div class="met"><div class="l">Przychód łącznie</div><div class="v">${f2(totAll)}</div></div>
+    <div class="met"><div class="l">Sprzedano łącznie</div><div class="v">${totQty.toFixed(1)} kg</div></div>
+    <div class="met"><div class="l">Transakcji łącznie</div><div class="v">${S.sales.length}</div></div>`;
+  const tb=document.getElementById('sl-today');
+  tb.innerHTML=ts.length?[...ts].reverse().map(s=>`<tr>
+    <td>${s.time}</td><td>${sName(s.seller)}</td>
+    <td><span class="dot" style="background:${fColor(s.fid)}"></span>${fName(s.fid)}</td>
+    <td>${s.qty} kg</td><td>${f2(s.price)}</td>
+    <td style="font-weight:600;color:#1D9E75">${f2(s.tot)}</td>
+    <td style="color:#888780;font-size:12px">${s.note||'—'}</td>
+    <td><button class="btn btn-r" onclick="delSale(${s.id})">✕</button></td>
+  </tr>`).join(''):'<tr><td colspan="8" class="empty">Brak sprzedaży dzisiaj</td></tr>';
+  const bf={};S.sales.forEach(s=>{if(!bf[s.fid])bf[s.fid]={q:0,t:0};bf[s.fid].q+=s.qty;bf[s.fid].t+=s.tot});
+  const mfq=Math.max(...Object.values(bf).map(x=>x.q),0.01);
+  document.getElementById('fl-stat').innerHTML=Object.entries(bf).length?Object.entries(bf).sort((a,b)=>b[1].q-a[1].q).map(([fid,v])=>`
+    <div style="margin-bottom:.6rem">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:2px">
+        <span><span class="dot" style="background:${fColor(fid)}"></span><b>${fName(fid)}</b></span>
+        <span>${v.q.toFixed(1)} kg &nbsp; <b>${f2(v.t)}</b></span></div>
+      <div class="bar"><div class="bfill" style="width:${Math.round(v.q/mfq*100)}%;background:${fColor(fid)}"></div></div>
+    </div>`).join(''):'<div class="empty">Brak danych</div>';
+  const bs={};S.sales.forEach(s=>{if(!bs[s.seller])bs[s.seller]={q:0,t:0};bs[s.seller].q+=s.qty;bs[s.seller].t+=s.tot});
+  const mst=Math.max(...Object.values(bs).map(x=>x.t),0.01);
+  document.getElementById('se-stat').innerHTML=Object.entries(bs).length?Object.entries(bs).sort((a,b)=>b[1].t-a[1].t).map(([sid,v])=>`
+    <div style="margin-bottom:.6rem">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:2px">
+        <span><b>${sName(sid)}</b></span><span>${v.q.toFixed(1)} kg &nbsp; <b>${f2(v.t)}</b></span></div>
+      <div class="bar"><div class="bfill" style="width:${Math.round(v.t/mst*100)}%;background:#378ADD"></div></div>
+    </div>`).join(''):'<div class="empty">Brak danych</div>';
+  const bd={};S.sales.forEach(s=>{if(!bd[s.date])bd[s.date]={r:0,q:0,c:0};bd[s.date].r+=s.tot;bd[s.date].q+=s.qty;bd[s.date].c++});
+  const days=Object.entries(bd).sort((a,b)=>b[0].localeCompare(a[0]));
+  document.getElementById('daily-hist').innerHTML=days.length?days.slice(0,20).map(([d,v])=>`<tr>
+    <td>${fD(d)}</td><td>${v.c}</td><td>${v.q.toFixed(1)} kg</td>
+    <td style="font-weight:600;color:#1D9E75">${f2(v.r)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Brak danych sprzedaży</td></tr>';
+}
+
+// ============ PRACOWNICY ============
+function addEmp(){
+  const n=document.getElementById('e-name').value.trim();
+  const r=+document.getElementById('e-rate').value;
+  if(!n||!r){alert('Podaj imię i stawkę godzinową');return}
+  S.employees.push({id:S.ne++,name:n,rate:r});
+  document.getElementById('e-name').value='';
+  document.getElementById('e-rate').value='';
+  saveLocal(); scheduleSync();
+  rEmps();rSelects();
+}
+
+function addWork(){
+  const eid=+document.getElementById('w-emp').value;
+  const date=document.getElementById('w-date').value||TD;
+  const fr=document.getElementById('w-from').value;
+  const to=document.getElementById('w-to').value;
+  if(!eid||!fr||!to){alert('Uzupełnij wszystkie pola');return}
+  const[fh,fm]=fr.split(':').map(Number);
+  const[th,tm]=to.split(':').map(Number);
+  const h=Math.round((th*60+tm-fh*60-fm)/60*100)/100;
+  if(h<=0){alert('Czas zakończenia musi być późniejszy niż rozpoczęcia');return}
+  S.works.push({id:S.nw++,eid,date,fr,to,h});
+  document.getElementById('w-from').value='';
+  document.getElementById('w-to').value='';
+  saveLocal(); scheduleSync();
+  rEmps();
+}
+
+function remWork(id){if(confirm('Usunąć ten wpis?')){S.works=S.works.filter(x=>x.id!==id);saveLocal();scheduleSync();rEmps()}}
+function remEmp(id){
+  if(!confirm('Usunąć pracownika? Zostaną usunięte też jego wpisy czasu pracy.')) return;
+  S.employees=S.employees.filter(x=>x.id!==id);
+  S.works=S.works.filter(x=>x.eid!==id);
+  saveLocal(); scheduleSync();
+  rEmps();rSelects();
+}
+
+function rEmps(){
+  const mk=mKey();
+  document.getElementById('e-body').innerHTML=S.employees.length?S.employees.map(e=>{
+    const ws=S.works.filter(w=>w.eid===e.id);
+    const mw=ws.filter(w=>w.date.startsWith(mk));
+    const mh=Math.round(mw.reduce((s,w)=>s+w.h,0)*100)/100;
+    const th=Math.round(ws.reduce((s,w)=>s+w.h,0)*100)/100;
+    return `<tr><td><b>${e.name}</b></td><td>${f2(e.rate)}/h</td><td>${mh.toFixed(1)} h</td>
+      <td style="font-weight:600;color:#E24B4A">${f2(mh*e.rate)}</td>
+      <td>${th.toFixed(1)} h</td><td style="font-weight:600">${f2(th*e.rate)}</td>
+      <td><button class="btn btn-r" onclick="remEmp(${e.id})">Usuń</button></td></tr>`;
+  }).join(''):'<tr><td colspan="7" class="empty">Brak pracowników</td></tr>';
+  const ws=[...S.works].sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('w-body').innerHTML=ws.length?ws.slice(0,30).map(w=>{
+    const e=S.employees.find(x=>x.id===w.eid);
+    return `<tr><td>${fD(w.date)}</td><td>${e?e.name:'—'}</td><td>${w.fr}</td><td>${w.to}</td>
+      <td>${w.h.toFixed(1)} h</td><td>${e?f2(w.h*e.rate):'—'}</td>
+      <td><button class="btn btn-r" onclick="remWork(${w.id})">✕</button></td></tr>`;
+  }).join(''):'<tr><td colspan="7" class="empty">Brak wpisów czasu pracy</td></tr>';
+}
+
+// ============ WYNIKI ============
+function rSummary(){
+  const rev=S.sales.reduce((s,x)=>s+x.tot,0);
+  const dCost=S.deliveries.reduce((s,x)=>s+x.tot,0);
+  const mk=mKey();
+  const monthWorks=S.works.filter(w=>w.date.startsWith(mk));
+  const labor=Math.round(monthWorks.reduce((s,w)=>{const e=S.employees.find(x=>x.id===w.eid);return s+(e?w.h*e.rate:0);},0)*100)/100;
+  const totalLabor=Math.round(S.works.reduce((s,w)=>{const e=S.employees.find(x=>x.id===w.eid);return s+(e?w.h*e.rate:0);},0)*100)/100;
+  const totCost=dCost+labor;
+  const profit=rev-totCost;
+  const margin=rev?Math.round(profit/rev*1000)/10:0;
+  document.getElementById('su-met').innerHTML=`
+    <div class="met"><div class="l">Przychód łącznie</div><div class="v" style="color:#1D9E75">${f2(rev)}</div></div>
+    <div class="met"><div class="l">Koszty łącznie</div><div class="v" style="color:#E24B4A">${f2(totCost)}</div><div class="s">dostawa + praca (mies.)</div></div>
+    <div class="met"><div class="l">Zysk / Strata</div><div class="v" style="color:${profit>=0?'#1D9E75':'#E24B4A'}">${f2(profit)}</div></div>
+    <div class="met"><div class="l">Marża brutto</div><div class="v">${margin}%</div></div>`;
+  document.getElementById('su-costs').innerHTML=`
+    <div style="padding:.5rem 0;border-bottom:1px solid #f0eed8"><div style="display:flex;justify-content:space-between;font-size:13px">
+      <span>📦 Dostawy</span><span style="font-weight:600">${f2(dCost)}</span></div>
+      <div style="font-size:11px;color:#888780;margin-top:2px">${S.deliveries.length} dostaw(y)</div></div>
+    <div style="padding:.5rem 0;border-bottom:1px solid #f0eed8"><div style="display:flex;justify-content:space-between;font-size:13px">
+      <span>👥 Wynagrodzenia (ten miesiąc)</span><span style="font-weight:600">${f2(labor)}</span></div></div>
+    <div style="padding:.5rem 0;border-bottom:1px solid #f0eed8"><div style="display:flex;justify-content:space-between;font-size:13px">
+      <span>👥 Wynagrodzenia (łącznie)</span><span style="font-weight:600">${f2(totalLabor)}</span></div></div>
+    <div style="padding:.5rem 0;display:flex;justify-content:space-between;font-size:14px;font-weight:600">
+      <span>Łącznie koszty</span><span style="color:#E24B4A">${f2(totCost)}</span></div>`;
+  const recent=[...S.sales.map(x=>({...x,_t:'sale'})),...S.deliveries.map(x=>({...x,_t:'del'}))].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);
+  document.getElementById('su-tx').innerHTML=recent.length?recent.map(tx=>tx._t==='del'?`
+    <div style="display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid #f0eed8;font-size:12px">
+      <span><span class="tag ta">dostawa</span> <b>${tx.sup}</b> <span style="color:#888780">${fD(tx.date)}</span></span>
+      <span style="color:#E24B4A;font-weight:600">-${f2(tx.tot)}</span></div>`:`
+    <div style="display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid #f0eed8;font-size:12px">
+      <span><span class="tag tg">sprzedaż</span> <span class="dot" style="background:${fColor(tx.fid)}"></span>${fName(tx.fid)} ${tx.qty}kg</span>
+      <span style="color:#1D9E75;font-weight:600">+${f2(tx.tot)}</span></div>`).join(''):'<div class="empty">Brak transakcji</div>';
+  const bd={};S.sales.forEach(s=>{if(!bd[s.date])bd[s.date]={r:0,q:0,c:0};bd[s.date].r+=s.tot;bd[s.date].q+=s.qty;bd[s.date].c++});
+  const dDeliveryCost={};S.deliveries.forEach(d=>{if(!dDeliveryCost[d.date])dDeliveryCost[d.date]=0;dDeliveryCost[d.date]+=d.tot});
+  const dLaborCost={};S.works.forEach(w=>{const e=S.employees.find(x=>x.id===w.eid);if(!e) return;if(!dLaborCost[w.date])dLaborCost[w.date]=0;dLaborCost[w.date]+=w.h*e.rate;});
+  const days=Object.entries(bd).sort((a,b)=>b[0].localeCompare(a[0]));
+  document.getElementById('su-daily').innerHTML=days.length?days.slice(0,10).map(([d,v])=>`<tr>
+    <td>${fD(d)}</td><td>${v.c}</td><td>${v.q.toFixed(1)} kg</td>
+    <td style="font-weight:600;color:#1D9E75">${f2(v.r)}</td>
+    <td style="color:#E24B4A">${dDeliveryCost[d]?f2(dDeliveryCost[d]):'—'}</td>
+    <td style="color:#E24B4A">${dLaborCost[d]?f2(dLaborCost[d]):'—'}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Brak danych sprzedaży</td></tr>';
+}
+
+// ============ INIT ============
+loadLocal();
+document.getElementById('d-date').value=TD;
+document.getElementById('sl-date').value=TD;
+document.getElementById('w-date').value=TD;
+rDForm();rDHist();rSelects();
+if(GAS_URL) scheduleSync();
+</script>
+</body>
+</html>
