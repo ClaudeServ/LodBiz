@@ -20,7 +20,7 @@
   --shadow-lg:0 8px 40px rgba(0,0,0,.15);
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
- 
+
 /* ============ EKRAN LOGOWANIA ============ */
 #login-screen{
   display:flex;align-items:center;justify-content:center;
@@ -70,7 +70,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   margin-top:.75rem;display:none;text-align:center;
 }
 .login-spinner{display:none;text-align:center;margin-top:.75rem;color:var(--text3);font-size:13px}
- 
+
 /* ============ APLIKACJA GŁÓWNA ============ */
 #app{display:none}
 .header{
@@ -104,7 +104,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .sync-pill.busy{color:#854F0B;border-color:#FAC775;background:var(--amber-l)}
 .pulse{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 1.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
- 
+
 .nav{
   display:flex;gap:2px;padding:.75rem 1.5rem 0;
   background:#fff;border-bottom:1px solid var(--border);
@@ -119,11 +119,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 }
 .tab.active{background:#fff;color:var(--text);border:1px solid var(--border);border-bottom:1px solid #fff}
 .tab:hover:not(.active){background:#eceae4}
- 
+
 .main{padding:1.5rem;max-width:1100px;margin:0 auto}
 .panel{display:none}
 .panel.active{display:block}
- 
+
 /* ============ KOMPONENTY ============ */
 h2{font-size:17px;font-weight:600;margin-bottom:1rem;color:var(--text)}
 h3{font-size:14px;font-weight:600;margin-bottom:.6rem;color:#444441}
@@ -166,7 +166,7 @@ tr:hover td{background:#fafaf8}
 .empty{text-align:center;padding:2rem;color:var(--text4);font-size:13px}
 .alert-warn{background:var(--amber-l);border:1px solid var(--amber);border-radius:8px;padding:.6rem 1rem;font-size:13px;color:#854F0B;margin-bottom:.75rem}
 .alert-info{background:var(--blue-l);border:1px solid #85B7EB;border-radius:8px;padding:.6rem 1rem;font-size:13px;color:#185FA5;margin-bottom:.75rem}
- 
+
 /* Overlay ładowania */
 #loading-overlay{
   position:fixed;inset:0;background:rgba(245,244,240,.9);
@@ -179,7 +179,7 @@ tr:hover td{background:#fafaf8}
 </style>
 </head>
 <body>
- 
+
 <!-- EKRAN LOGOWANIA -->
 <div id="login-screen">
   <div class="login-card">
@@ -201,14 +201,14 @@ tr:hover td{background:#fafaf8}
     <div class="login-spinner" id="l-spin">⏳ Weryfikuję dane logowania…</div>
   </div>
 </div>
- 
+
 <!-- GŁÓWNA APLIKACJA -->
 <div id="app">
   <div id="loading-overlay" style="display:none">
     <div class="spinner"></div>
     <p id="loading-text">Wczytuję dane…</p>
   </div>
- 
+
   <div class="header">
     <span style="font-size:20px">🍦</span>
     <span class="header-logo">Lodziarnia Manager</span>
@@ -222,9 +222,9 @@ tr:hover td{background:#fafaf8}
       <button class="logout-btn" onclick="doLogout()">Wyloguj</button>
     </div>
   </div>
- 
+
   <div class="nav" id="nav"></div>
- 
+
   <div class="main">
     <div id="p-delivery" class="panel">
       <h2>Nowa dostawa</h2>
@@ -248,7 +248,7 @@ tr:hover td{background:#fafaf8}
       <h2>Historia dostaw</h2>
       <div id="d-hist"></div>
     </div>
- 
+
     <div id="p-stock" class="panel">
       <h2>Stan magazynowy</h2>
       <div id="st-alerts"></div>
@@ -269,7 +269,7 @@ tr:hover td{background:#fafaf8}
         </div>
       </div>
     </div>
- 
+
     <div id="p-sales" class="panel">
       <h2>Rejestracja sprzedaży</h2>
       <div class="card">
@@ -303,7 +303,7 @@ tr:hover td{background:#fafaf8}
         <tbody id="daily-hist"></tbody></table>
       </div>
     </div>
- 
+
     <div id="p-employees" class="panel">
       <h2>Pracownicy</h2>
       <div class="g2">
@@ -335,7 +335,7 @@ tr:hover td{background:#fafaf8}
         <tbody id="w-body"></tbody></table>
       </div>
     </div>
- 
+
     <div id="p-summary" class="panel">
       <h2>Podsumowanie finansowe</h2>
       <div class="g4" id="su-met"></div>
@@ -351,26 +351,26 @@ tr:hover td{background:#fafaf8}
     </div>
   </div>
 </div>
- 
+
 <script>
 // ============================================================
 // KONFIGURACJA — wpisz tu URL swojego Apps Script po wdrożeniu
 // ============================================================
-const GAS_URL = https://script.google.com/macros/s/AKfycbzDlHD2xN-7JGpfs0wHva-vVkBwswc-iniSLgm8VcerxTdjQ_fEKcTq798k4BpsUPy4/exec;
+const GAS_URL = https://script.google.com/macros/s/AKfycbxlK1Iad4_O6mmzGoSGCJ-R6CNPy3HxjQ4Nj8LR0KvOTnBQgYBCx_Cr3I6tHanQlu5W/exec;
 // Przykład: 'https://script.google.com/macros/s/AKfycb.../exec'
- 
+
 // ============================================================
 // STAN APLIKACJI (wyłącznie z Sheets, bez localStorage)
 // ============================================================
 let TOKEN = sessionStorage.getItem('lod_token') || null;
 let CURRENT_USER = null;
 let USER_TABS = [];
- 
+
 let S = {
   flavors:[], deliveries:[], sales:[], employees:[], works:[],
   nf:1, nd:1, ns:1, ne:1, nw:1
 };
- 
+
 const DEFAULT_FLAVORS = [
   {id:1,name:'Wanilia',color:'#D4AA20',price:22,stock:12,thr:4},
   {id:2,name:'Czekolada',color:'#6B3A2A',price:24,stock:8,thr:4},
@@ -378,151 +378,151 @@ const DEFAULT_FLAVORS = [
   {id:4,name:'Mięta',color:'#1D9E75',price:28,stock:3,thr:3},
   {id:5,name:'Pistacja',color:'#7BA05B',price:35,stock:7,thr:2},
 ];
- 
+
 const TD = new Date().toISOString().split('T')[0];
-document.getElementById('cur-date').textContent =
-  new Date().toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
- 
+window.addEventListener('DOMContentLoaded', () => {
+  const el = document.getElementById('cur-date');
+  if (el) el.textContent = new Date().toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+});
+
 // ============================================================
-// API — JSONP (omija CORS; Apps Script redirectuje fetch, ale
-//        nie blokuje <script> injection)
+// API — JSONP (jedyna metoda działająca z GAS bez CORS)
 // ============================================================
 let _cbIdx = 0;
- 
-function gasCall(params, timeoutMs = 30000) {
+
+function gasCall(params, timeoutMs = 25000) {
   return new Promise((resolve, reject) => {
-    if (!GAS_URL || GAS_URL === https://script.google.com/macros/s/AKfycbzDlHD2xN-7JGpfs0wHva-vVkBwswc-iniSLgm8VcerxTdjQ_fEKcTq798k4BpsUPy4/exec) {
-      return reject(new Error('Skonfiguruj GAS_URL w pliku HTML'));
+    if (!GAS_URL || GAS_URL.indexOf('script.google.com') === -1) {
+      return reject(new Error('Nieprawidłowy GAS_URL. Wpisz URL swojego wdrożenia Apps Script.'));
     }
+
     const cbName = '__gasCb' + (++_cbIdx);
     const script = document.createElement('script');
-    let done = false;
- 
+
     const cleanup = () => {
-      done = true;
       delete window[cbName];
-      if (script.parentNode) script.parentNode.removeChild(script);
+      try { document.head.removeChild(script); } catch(e) {}
     };
- 
+
     const timer = setTimeout(() => {
       cleanup();
-      reject(new Error('Przekroczono czas oczekiwania (30s). Sprawdź URL skryptu i uprawnienia wdrożenia.'));
+      reject(new Error('Timeout (25s) — sprawdź czy wdrożenie działa i czy "Kto ma dostęp" = Wszyscy'));
     }, timeoutMs);
- 
+
     window[cbName] = (json) => {
       clearTimeout(timer);
       cleanup();
-      if (json.ok) resolve(json.data);
-      else reject(new Error(json.error || 'Błąd serwera'));
+      if (json && json.ok) resolve(json.data);
+      else reject(new Error((json && json.error) || 'Błąd serwera'));
     };
- 
-    // Wszystkie dane (łącznie z POST-owymi) idą przez GET + JSONP
-    // Duże payloady (zapis) kodujemy jako base64 w parametrze "payload"
-    const p = { ...params, callback: cbName };
-    script.src = GAS_URL + '?' + new URLSearchParams(p);
-    script.onerror = () => {
+
+    script.onerror = (e) => {
       clearTimeout(timer);
       cleanup();
-      reject(new Error('Nie można załadować skryptu GAS. Sprawdź URL i uprawnienia ("Wszyscy").'));
+      reject(new Error('Błąd ładowania skryptu GAS — sprawdź URL i dostęp "Wszyscy"'));
     };
+
+    const qs = Object.keys(params).map(k =>
+      encodeURIComponent(k) + '=' + encodeURIComponent(params[k])
+    ).join('&');
+    script.src = GAS_URL + '?callback=' + cbName + '&' + qs;
     document.head.appendChild(script);
   });
 }
- 
-// GET — akcje read/check/login/logout
+
 async function api(params) {
   return gasCall(params);
 }
- 
-// "POST" — zapis danych; kodujemy payload jako JSON w parametrze,
-// żeby zmieścić się w URL (Apps Script obsłuży to w doGet)
+
 async function apiPost(body) {
-  // Serializujemy body do parametru "payload" (base64 dla bezpieczeństwa)
-  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(body))));
-  return gasCall({ action: 'write_encoded', payload: encoded });
+  // Kodujemy cały payload jako base64 żeby zmieścić się w URL GET
+  const json    = JSON.stringify(body);
+  const encoded = btoa(unescape(encodeURIComponent(json)));
+  return gasCall({ action: 'write_encoded', token: body.token, payload: encoded });
 }
- 
+
 function setSyncStatus(type, txt) {
   const el = document.getElementById('sync-pill');
-  el.className = 'sync-pill ' + type;
-  document.getElementById('sync-label').textContent = txt;
+  if (el) { el.className = 'sync-pill ' + type; }
+  const lb = document.getElementById('sync-label');
+  if (lb) lb.textContent = txt;
 }
- 
+
 // ============================================================
 // LOGOWANIE / WYLOGOWANIE
 // ============================================================
-document.getElementById('l-pass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('l-pass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+  document.getElementById('l-login').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('l-pass').focus();
+  });
 });
-document.getElementById('l-login').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('l-pass').focus();
-});
- 
+
 async function doLogin() {
   const login = document.getElementById('l-login').value.trim();
-  const pass = document.getElementById('l-pass').value;
-  const btn = document.getElementById('l-btn');
-  const err = document.getElementById('l-err');
-  const spin = document.getElementById('l-spin');
- 
-  if (!login || !pass) {
-    showLoginErr('Wpisz login i hasło');
+  const pass  = document.getElementById('l-pass').value;
+  const btn   = document.getElementById('l-btn');
+
+  if (!login || !pass) { showLoginErr('Wpisz login i hasło'); return; }
+  if (!GAS_URL || GAS_URL.indexOf('script.google.com') === -1) {
+    showLoginErr('Błąd konfiguracji: nieprawidłowy GAS_URL w pliku HTML');
     return;
   }
-  if (!GAS_URL || GAS_URL === https://script.google.com/macros/s/AKfycbzDlHD2xN-7JGpfs0wHva-vVkBwswc-iniSLgm8VcerxTdjQ_fEKcTq798k4BpsUPy4/exec) {
-    showLoginErr('Skonfiguruj najpierw GAS_URL w pliku HTML');
-    return;
-  }
- 
+
   btn.disabled = true;
-  err.style.display = 'none';
-  spin.style.display = 'block';
- 
+  btn.textContent = 'Loguję…';
+  document.getElementById('l-err').style.display = 'none';
+  document.getElementById('l-spin').style.display = 'block';
+
   try {
-    const data = await api({ action: 'login', login, password: pass });
-    TOKEN = data.token;
+    const data = await api({ action: 'login', login: login, password: pass });
+    TOKEN       = data.token;
     CURRENT_USER = data.login;
-    USER_TABS = data.tabs;
+    USER_TABS   = data.tabs;
     sessionStorage.setItem('lod_token', TOKEN);
     await startApp();
   } catch(e) {
-    showLoginErr(e.message || 'Błąd logowania');
+    showLoginErr(e.message || 'Błąd logowania — spróbuj ponownie');
   } finally {
-    btn.disabled = false;
-    spin.style.display = 'none';
+    btn.disabled    = false;
+    btn.textContent = 'Zaloguj się';
+    document.getElementById('l-spin').style.display = 'none';
   }
 }
- 
+
 function showLoginErr(msg) {
   const el = document.getElementById('l-err');
-  el.textContent = msg;
+  el.textContent = '⚠ ' + msg;
   el.style.display = 'block';
 }
- 
+
 async function doLogout() {
   try { await api({ action: 'logout', token: TOKEN }); } catch(e) {}
-  TOKEN = null;
+  TOKEN        = null;
   CURRENT_USER = null;
+  USER_TABS    = [];
   sessionStorage.removeItem('lod_token');
-  document.getElementById('app').style.display = 'none';
+  document.getElementById('app').style.display          = 'none';
   document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('l-pass').value = '';
-  document.getElementById('l-err').style.display = 'none';
+  document.getElementById('l-pass').value               = '';
+  document.getElementById('l-err').style.display        = 'none';
 }
- 
+
 // ============================================================
 // START APLIKACJI
 // ============================================================
 async function startApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
- 
+
   // Badge użytkownika
   document.getElementById('user-badge').textContent = CURRENT_USER;
- 
+
   // Zbuduj nawigację wg uprawnień
   buildNav();
- 
+
   // Wczytaj dane z Sheets
   showLoading('Wczytuję dane z Google Sheets…');
   try {
@@ -533,11 +533,11 @@ async function startApp() {
     alert('Błąd wczytywania danych: ' + e.message);
   }
   hideLoading();
- 
+
   // Pokaż pierwszą dostępną zakładkę
   if (USER_TABS.length > 0) sw(USER_TABS[0]);
 }
- 
+
 // ============================================================
 // NAWIGACJA
 // ============================================================
@@ -548,7 +548,7 @@ const TAB_DEFS = [
   { id:'employees', label:'👥 Pracownicy' },
   { id:'summary',   label:'📊 Wyniki' },
 ];
- 
+
 function buildNav() {
   const nav = document.getElementById('nav');
   nav.innerHTML = '';
@@ -562,7 +562,7 @@ function buildNav() {
     nav.appendChild(btn);
   });
 }
- 
+
 function sw(n) {
   if (!USER_TABS.includes(n)) return;
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === n));
@@ -576,7 +576,7 @@ function sw(n) {
   if (n==='summary') rSummary();
   if (n==='delivery') rDHist();
 }
- 
+
 // ============================================================
 // LOADING OVERLAY
 // ============================================================
@@ -587,7 +587,7 @@ function showLoading(txt) {
 function hideLoading() {
   document.getElementById('loading-overlay').style.display = 'none';
 }
- 
+
 // ============================================================
 // PERSISTENCE — wszystko przez Sheets
 // ============================================================
@@ -599,7 +599,7 @@ async function loadAllData() {
     readSheet('employees'),
     readSheet('works'),
   ]);
- 
+
   S.flavors = parseSheet(flavorsRaw, r => ({
     id:+r[0], name:r[1], color:r[2], price:+r[3], stock:+r[4], thr:+r[5]
   }));
@@ -607,41 +607,41 @@ async function loadAllData() {
     S.flavors = JSON.parse(JSON.stringify(DEFAULT_FLAVORS));
     await writeSheet('flavors', flavorsToRows());
   }
- 
+
   S.sales = parseSheet(salesRaw, r => ({
     id:+r[0], date:r[1], time:r[2], seller:String(r[3]), fid:+r[4],
     qty:+r[5], price:+r[6], tot:+r[7], note:r[8]||''
   }));
- 
+
   S.deliveries = parseSheet(delivRaw, r => ({
     id:+r[0], date:r[1], sup:r[2], inv:r[3]||'', tot:+r[4],
     items: tryParse(r[5], [])
   }));
- 
+
   S.employees = parseSheet(empsRaw, r => ({
     id:+r[0], name:r[1], rate:+r[2]
   }));
- 
+
   S.works = parseSheet(worksRaw, r => ({
     id:+r[0], eid:+r[1], date:r[2], fr:r[3], to:r[4], h:+r[5]
   }));
- 
+
   // Ustal następne ID
   S.nf = S.flavors.length ? Math.max(...S.flavors.map(x=>x.id)) + 1 : 1;
   S.nd = S.deliveries.length ? Math.max(...S.deliveries.map(x=>x.id)) + 1 : 1;
   S.ns = S.sales.length ? Math.max(...S.sales.map(x=>x.id)) + 1 : 1;
   S.ne = S.employees.length ? Math.max(...S.employees.map(x=>x.id)) + 1 : 1;
   S.nw = S.works.length ? Math.max(...S.works.map(x=>x.id)) + 1 : 1;
- 
+
   rSelects();
 }
- 
+
 async function readSheet(name) {
   try {
     return await api({ action: 'read', token: TOKEN, sheet: name });
   } catch(e) { return []; }
 }
- 
+
 async function writeSheet(name, rows) {
   setSyncStatus('busy', 'Zapisuję…');
   try {
@@ -652,16 +652,16 @@ async function writeSheet(name, rows) {
     throw e;
   }
 }
- 
+
 function parseSheet(raw, mapper) {
   if (!raw || raw.length < 2) return [];
   return raw.slice(1).filter(r => r[0] !== '' && r[0] !== null && r[0] !== undefined).map(mapper);
 }
- 
+
 function tryParse(str, def) {
   try { return JSON.parse(str); } catch(e) { return def; }
 }
- 
+
 // ============================================================
 // SERIALIZERS — obiekty → wiersze Sheets
 // ============================================================
@@ -690,7 +690,7 @@ function worksToRows() {
   S.works.forEach(w => rows.push([w.id,w.eid,w.date,w.fr,w.to,w.h]));
   return rows;
 }
- 
+
 // ============================================================
 // HELPER FUNCTIONS
 // ============================================================
@@ -700,14 +700,14 @@ function fColor(id){const f=S.flavors.find(x=>x.id==id);return f?f.color:'#888'}
 function fName(id){const f=S.flavors.find(x=>x.id==id);return f?f.name:'—'}
 function sName(id){if(id==='own'||id==='0'||id===0) return 'Właściciel';const e=S.employees.find(x=>x.id==id);return e?e.name:'Nieznany'}
 function mKey(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')}
- 
+
 // ============================================================
 // DOSTAWY
 // ============================================================
 let dItems = [];
- 
+
 function addDItem(){dItems.push({fid:'',qty:0,ppk:0});rDForm()}
- 
+
 function rDForm(){
   const c=document.getElementById('d-items');
   if(!dItems.length){c.innerHTML='<div class="empty">Brak pozycji. Kliknij "Dodaj pozycję"</div>';document.getElementById('d-tot').textContent='0,00 zł';return}
@@ -730,7 +730,7 @@ function rDForm(){
 }
 function setDI(i,k,v){dItems[i][k]=v;rDForm()}
 function remDI(i){dItems.splice(i,1);rDForm()}
- 
+
 async function saveDelivery(){
   const date=document.getElementById('d-date').value||TD;
   const sup=document.getElementById('d-sup').value||'Nieznany dostawca';
@@ -755,7 +755,7 @@ async function saveDelivery(){
   } catch(e) { alert('Błąd zapisu: '+e.message); }
   hideLoading();
 }
- 
+
 function rDHist(){
   const el=document.getElementById('d-hist');
   if(!S.deliveries.length){el.innerHTML='<div class="card"><div class="empty">Brak historii dostaw</div></div>';return}
@@ -769,7 +769,7 @@ function rDHist(){
       <tbody>${d.items.map(it=>`<tr><td><span class="dot" style="background:${fColor(it.fid)}"></span><b>${fName(it.fid)}</b></td><td>${it.qty} kg</td><td>${f2(it.ppk)}</td><td>${f2(it.qty*it.ppk)}</td></tr>`).join('')}</tbody></table>
     </div>`).join('');
 }
- 
+
 // ============================================================
 // MAGAZYN
 // ============================================================
@@ -788,7 +788,7 @@ async function addFlavor(){
   hideLoading();
   rStock();rSelects();
 }
- 
+
 function rStock(){
   const tot=S.flavors.reduce((s,f)=>s+f.stock,0);
   const low=S.flavors.filter(f=>f.stock<=f.thr&&f.stock>0);
@@ -816,7 +816,7 @@ function rStock(){
       </td></tr>`;
   }).join('');
 }
- 
+
 async function adjStock(id){
   const inp=document.getElementById('adj-'+id);
   const v=parseFloat(inp.value);
@@ -829,7 +829,7 @@ async function adjStock(id){
   hideLoading();
   rStock();
 }
- 
+
 // ============================================================
 // SELECTS
 // ============================================================
@@ -841,7 +841,7 @@ function rSelects(){
   const we=document.getElementById('w-emp');
   if(we){const ce=we.value;we.innerHTML=`<option value="">-- Wybierz pracownika --</option>`+S.employees.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');if(ce)we.value=ce;}
 }
- 
+
 // ============================================================
 // SPRZEDAŻ
 // ============================================================
@@ -867,7 +867,7 @@ async function addSale(){
   try { await Promise.all([writeSheet('sales',salesToRows()), writeSheet('flavors',flavorsToRows())]); } catch(e) { alert('Błąd: '+e.message); }
   hideLoading();
 }
- 
+
 async function delSale(id){
   if(!confirm('Usunąć ten wpis sprzedaży?')) return;
   const s=S.sales.find(x=>x.id===id);
@@ -880,7 +880,7 @@ async function delSale(id){
   try { await Promise.all([writeSheet('sales',salesToRows()), writeSheet('flavors',flavorsToRows())]); } catch(e) { alert('Błąd: '+e.message); }
   hideLoading();
 }
- 
+
 function rSales(){
   rSelects();
   const ts=S.sales.filter(s=>s.date===TD);
@@ -921,7 +921,7 @@ function rSales(){
     <td>${fD(d)}</td><td>${v.c}</td><td>${v.q.toFixed(1)} kg</td>
     <td style="font-weight:600;color:var(--green)">${f2(v.r)}</td></tr>`).join('')||'<tr><td colspan="4" class="empty">Brak danych</td></tr>';
 }
- 
+
 // ============================================================
 // PRACOWNICY
 // ============================================================
@@ -937,7 +937,7 @@ async function addEmp(){
   hideLoading();
   rEmps();rSelects();
 }
- 
+
 async function addWork(){
   const eid=+document.getElementById('w-emp').value;
   const date=document.getElementById('w-date').value||TD;
@@ -956,7 +956,7 @@ async function addWork(){
   hideLoading();
   rEmps();
 }
- 
+
 async function remWork(id){
   if(!confirm('Usunąć ten wpis?')) return;
   S.works=S.works.filter(x=>x.id!==id);
@@ -965,7 +965,7 @@ async function remWork(id){
   hideLoading();
   rEmps();
 }
- 
+
 async function remEmp(id){
   if(!confirm('Usunąć pracownika? Zostaną usunięte też jego wpisy czasu pracy.')) return;
   S.employees=S.employees.filter(x=>x.id!==id);
@@ -975,7 +975,7 @@ async function remEmp(id){
   hideLoading();
   rEmps();rSelects();
 }
- 
+
 function rEmps(){
   const mk=mKey();
   document.getElementById('e-body').innerHTML=S.employees.length?S.employees.map(e=>{
@@ -996,7 +996,7 @@ function rEmps(){
       <td><button class="btn btn-r" onclick="remWork(${w.id})">✕</button></td></tr>`;
   }).join(''):'<tr><td colspan="7" class="empty">Brak wpisów czasu pracy</td></tr>';
 }
- 
+
 // ============================================================
 // WYNIKI
 // ============================================================
@@ -1042,20 +1042,20 @@ function rSummary(){
     <td style="color:var(--red)">${dDC[d]?f2(dDC[d]):'—'}</td>
     <td style="color:var(--red)">${dLC[d]?f2(dLC[d]):'—'}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">Brak danych</td></tr>';
 }
- 
+
 // ============================================================
-// INICJALIZACJA — sprawdź czy jest aktywna sesja
+// INICJALIZACJA
 // ============================================================
 (async function init(){
-  document.getElementById('d-date').value=TD;
-  document.getElementById('sl-date').value=TD;
-  document.getElementById('w-date').value=TD;
- 
+  // Ustaw domyślne daty
+  const dateInputs = ['d-date','sl-date','w-date'];
+  dateInputs.forEach(id => { const el = document.getElementById(id); if(el) el.value = TD; });
+
   if (TOKEN) {
     try {
       const data = await api({ action: 'check', token: TOKEN });
       CURRENT_USER = data.login;
-      USER_TABS = data.tabs;
+      USER_TABS    = data.tabs;
       await startApp();
       return;
     } catch(e) {
@@ -1068,4 +1068,3 @@ function rSummary(){
 </script>
 </body>
 </html>
- 
