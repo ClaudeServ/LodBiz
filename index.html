@@ -16,116 +16,85 @@
   --border:#e0ded8;--border2:#f0eed8;
   --text:#2c2c2a;--text2:#5F5E5A;--text3:#888780;--text4:#B4B2A9;
   --radius:12px;--radius-sm:8px;
-  --shadow:0 2px 12px rgba(0,0,0,.08);
-  --shadow-lg:0 8px 40px rgba(0,0,0,.15);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.18);
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
 
-/* ============ EKRAN LOGOWANIA ============ */
+/* ===== SETUP SCREEN ===== */
+#setup-screen{
+  display:none;align-items:center;justify-content:center;
+  min-height:100vh;padding:1rem;
+  background:linear-gradient(135deg,#0a2a1e 0%,#1a5c42 100%);
+}
+#setup-screen.visible{display:flex}
+.setup-card{
+  background:#fff;border-radius:20px;padding:2rem;
+  width:100%;max-width:480px;box-shadow:var(--shadow-lg);
+}
+.setup-card h2{font-size:18px;font-weight:600;margin-bottom:.5rem;color:#0F6E56}
+.setup-card p{font-size:13px;color:var(--text3);margin-bottom:1.25rem;line-height:1.6}
+.setup-input{width:100%;height:42px;font-size:13px;border-radius:8px;border:1.5px solid var(--border);padding:0 12px;font-family:inherit;margin-bottom:.75rem}
+.setup-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,.12)}
+.setup-btn{width:100%;height:44px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer}
+.setup-btn:hover{background:var(--green-d)}
+.setup-note{font-size:11px;color:var(--text4);margin-top:.75rem;line-height:1.6}
+.setup-err{background:var(--red-l);border:1px solid #F7C1C1;border-radius:8px;padding:.5rem .75rem;font-size:12px;color:#A32D2D;margin-bottom:.75rem;display:none}
+
+/* ===== LOGIN SCREEN ===== */
 #login-screen{
-  display:flex;align-items:center;justify-content:center;
+  display:none;align-items:center;justify-content:center;
   min-height:100vh;padding:1rem;
   background:linear-gradient(135deg,#0a2a1e 0%,#0f3d2c 40%,#1a5c42 100%);
   position:relative;overflow:hidden;
 }
-#login-screen::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 60% 40%,rgba(29,158,117,.15) 0%,transparent 70%);
-}
-#login-screen::after{
-  content:'🍦';font-size:280px;position:absolute;
-  right:-40px;bottom:-60px;opacity:.04;pointer-events:none;
-}
+#login-screen.visible{display:flex}
+#login-screen::after{content:'🍦';font-size:260px;position:absolute;right:-30px;bottom:-50px;opacity:.04;pointer-events:none}
 .login-card{
   background:rgba(255,255,255,.97);border-radius:20px;
-  padding:2.5rem;width:100%;max-width:420px;
+  padding:2.5rem;width:100%;max-width:400px;
   box-shadow:var(--shadow-lg);position:relative;z-index:1;
-  animation:slideUp .4s ease;
+  animation:slideUp .35s ease;
 }
-@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.login-logo{text-align:center;margin-bottom:2rem}
-.login-logo .ice{font-size:48px;display:block;margin-bottom:.5rem}
-.login-logo h1{font-family:'DM Serif Display',serif;font-size:26px;color:var(--text);font-weight:400}
-.login-logo p{font-size:13px;color:var(--text3);margin-top:4px}
-.login-field{margin-bottom:1rem}
-.login-field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-.login-field input{
-  width:100%;height:46px;border:1.5px solid var(--border);border-radius:10px;
-  padding:0 14px;font-size:14px;font-family:inherit;color:var(--text);
-  background:#fff;transition:all .2s;
-}
-.login-field input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,.12)}
-.login-btn{
-  width:100%;height:48px;background:var(--green);color:#fff;
-  border:none;border-radius:10px;font-size:15px;font-weight:600;
-  font-family:inherit;cursor:pointer;transition:all .2s;margin-top:.5rem;
-  letter-spacing:.3px;
-}
-.login-btn:hover{background:var(--green-d);transform:translateY(-1px);box-shadow:0 4px 16px rgba(29,158,117,.35)}
-.login-btn:active{transform:translateY(0)}
-.login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.login-error{
-  background:var(--red-l);border:1px solid #F7C1C1;border-radius:8px;
-  padding:.6rem 1rem;font-size:13px;color:#A32D2D;
-  margin-top:.75rem;display:none;text-align:center;
-}
-.login-spinner{display:none;text-align:center;margin-top:.75rem;color:var(--text3);font-size:13px}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.login-logo{text-align:center;margin-bottom:1.75rem}
+.login-logo span{font-size:44px;display:block;margin-bottom:.4rem}
+.login-logo h1{font-family:'DM Serif Display',serif;font-size:24px;font-weight:400}
+.login-logo p{font-size:12px;color:var(--text3);margin-top:3px}
+.lf{margin-bottom:.9rem}
+.lf label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.lf input{width:100%;height:44px;border:1.5px solid var(--border);border-radius:10px;padding:0 13px;font-size:14px;font-family:inherit;color:var(--text);transition:border .15s}
+.lf input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,.12)}
+.login-btn{width:100%;height:46px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s;margin-top:.25rem}
+.login-btn:hover:not(:disabled){background:var(--green-d)}
+.login-btn:disabled{opacity:.65;cursor:not-allowed}
+.l-err{background:var(--red-l);border:1px solid #F7C1C1;border-radius:8px;padding:.55rem .9rem;font-size:13px;color:#A32D2D;margin-top:.75rem;display:none;line-height:1.5}
+.l-change{text-align:center;margin-top:.75rem;font-size:11px;color:var(--text4)}
+.l-change a{color:var(--green-d);cursor:pointer;text-decoration:underline}
 
-/* ============ APLIKACJA GŁÓWNA ============ */
+/* ===== MAIN APP ===== */
 #app{display:none}
-.header{
-  background:#fff;border-bottom:1px solid var(--border);
-  padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;
-  position:sticky;top:0;z-index:100;
-}
-.header-logo{font-family:'DM Serif Display',serif;font-size:20px;color:var(--green);font-weight:400}
+#app.visible{display:block}
+.header{background:#fff;border-bottom:1px solid var(--border);padding:.7rem 1.5rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100}
+.header-logo{font-family:'DM Serif Display',serif;font-size:19px;color:var(--green);font-weight:400}
 .header-date{font-size:12px;color:var(--text3)}
-.header-user{
-  margin-left:auto;display:flex;align-items:center;gap:.75rem;
-  font-size:13px;
-}
-.user-badge{
-  background:var(--green-l);color:var(--green-d);
-  padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;
-}
-.logout-btn{
-  height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border);
-  background:#fff;color:var(--text2);font-size:12px;font-weight:500;
-  cursor:pointer;font-family:inherit;transition:all .15s;
-}
+.header-user{margin-left:auto;display:flex;align-items:center;gap:.6rem;font-size:13px}
+.user-badge{background:var(--green-l);color:var(--green-d);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.logout-btn{height:30px;padding:0 11px;border-radius:7px;border:1px solid var(--border);background:#fff;color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
 .logout-btn:hover{background:var(--red-l);color:var(--red);border-color:#F7C1C1}
-.sync-pill{
-  display:flex;align-items:center;gap:5px;font-size:12px;
-  padding:3px 10px;border-radius:20px;border:1px solid var(--border);
-  background:var(--bg);transition:all .3s;cursor:default;
-}
+.sync-pill{display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:var(--bg)}
 .sync-pill.ok{color:var(--green-d);border-color:#9FE1CB;background:var(--green-l)}
 .sync-pill.err{color:#A32D2D;border-color:#F7C1C1;background:var(--red-l)}
 .sync-pill.busy{color:#854F0B;border-color:#FAC775;background:var(--amber-l)}
 .pulse{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 1.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-
-.nav{
-  display:flex;gap:2px;padding:.75rem 1.5rem 0;
-  background:#fff;border-bottom:1px solid var(--border);
-  overflow-x:auto;
-}
+.nav{display:flex;gap:2px;padding:.7rem 1.5rem 0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto}
 .nav::-webkit-scrollbar{height:0}
-.tab{
-  padding:8px 16px;border-radius:8px 8px 0 0;font-size:13px;font-weight:500;
-  cursor:pointer;background:var(--bg);color:var(--text2);
-  border:none;font-family:inherit;transition:all .15s;
-  margin-bottom:-1px;border-bottom:1px solid var(--border);white-space:nowrap;
-}
+.tab{padding:8px 15px;border-radius:8px 8px 0 0;font-size:13px;font-weight:500;cursor:pointer;background:var(--bg);color:var(--text2);border:none;font-family:inherit;transition:all .15s;margin-bottom:-1px;border-bottom:1px solid var(--border);white-space:nowrap}
 .tab.active{background:#fff;color:var(--text);border:1px solid var(--border);border-bottom:1px solid #fff}
 .tab:hover:not(.active){background:#eceae4}
-
 .main{padding:1.5rem;max-width:1100px;margin:0 auto}
-.panel{display:none}
-.panel.active{display:block}
-
-/* ============ KOMPONENTY ============ */
-h2{font-size:17px;font-weight:600;margin-bottom:1rem;color:var(--text)}
+.panel{display:none}.panel.active{display:block}
+h2{font-size:17px;font-weight:600;margin-bottom:1rem}
 h3{font-size:14px;font-weight:600;margin-bottom:.6rem;color:#444441}
 .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -133,96 +102,92 @@ h3{font-size:14px;font-weight:600;margin-bottom:.6rem;color:#444441}
 @media(max-width:640px){.g2{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}}
 .met{background:var(--bg);border-radius:10px;padding:.85rem 1rem}
 .met .l{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.met .v{font-size:22px;font-weight:600;color:var(--text)}
+.met .v{font-size:22px;font-weight:600}
 .met .s{font-size:11px;color:var(--text4);margin-top:2px}
 label{font-size:12px;color:var(--text2);display:block;margin-bottom:3px;font-weight:500}
-input,select{
-  width:100%;height:34px;font-size:13px;border-radius:var(--radius-sm);
-  border:1px solid #D3D1C7;padding:0 10px;background:#fff;
-  color:var(--text);font-family:inherit;transition:border .15s;
-}
+input,select{width:100%;height:34px;font-size:13px;border-radius:var(--radius-sm);border:1px solid #D3D1C7;padding:0 10px;background:#fff;color:var(--text);font-family:inherit;transition:border .15s}
 input:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,.12)}
 .row{display:flex;gap:.6rem;align-items:flex-end;flex-wrap:wrap}
 .fg{flex:1;min-width:100px}
-.btn{height:34px;padding:0 16px;border-radius:var(--radius-sm);border:1px solid #D3D1C7;background:#fff;color:var(--text);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn{height:34px;padding:0 16px;border-radius:var(--radius-sm);border:1px solid #D3D1C7;background:#fff;color:var(--text);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
 .btn:hover{background:var(--bg)}
-.btn-g{background:var(--green);color:#fff;border-color:var(--green)}
-.btn-g:hover{background:var(--green-d)}
-.btn-r{background:var(--red);color:#fff;border-color:var(--red);height:26px;padding:0 8px;font-size:11px;border-radius:6px}
-.btn-r:hover{background:#A32D2D}
+.btn-g{background:var(--green);color:#fff;border-color:var(--green)}.btn-g:hover{background:var(--green-d)}
+.btn-r{background:var(--red);color:#fff;border-color:var(--red);height:26px;padding:0 8px;font-size:11px;border-radius:6px}.btn-r:hover{background:#A32D2D}
 .div{height:1px;background:var(--border2);margin:1rem 0}
 table{width:100%;font-size:13px;border-collapse:collapse}
 th{font-size:11px;color:var(--text3);font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px}
-td{padding:8px;border-bottom:1px solid var(--border2);color:var(--text);vertical-align:middle}
+td{padding:8px;border-bottom:1px solid var(--border2);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#fafaf8}
 .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;flex-shrink:0}
 .tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.3px}
-.tg{background:var(--green-l);color:var(--green-d)}
-.ta{background:var(--amber-l);color:#854F0B}
-.tr{background:var(--red-l);color:#A32D2D}
+.tg{background:var(--green-l);color:var(--green-d)}.ta{background:var(--amber-l);color:#854F0B}.tr{background:var(--red-l);color:#A32D2D}
 .bar{height:5px;border-radius:3px;background:var(--border);margin-top:4px;overflow:hidden}
 .bfill{height:100%;border-radius:3px;transition:width .4s}
 .empty{text-align:center;padding:2rem;color:var(--text4);font-size:13px}
 .alert-warn{background:var(--amber-l);border:1px solid var(--amber);border-radius:8px;padding:.6rem 1rem;font-size:13px;color:#854F0B;margin-bottom:.75rem}
 .alert-info{background:var(--blue-l);border:1px solid #85B7EB;border-radius:8px;padding:.6rem 1rem;font-size:13px;color:#185FA5;margin-bottom:.75rem}
-
-/* Overlay ładowania */
-#loading-overlay{
-  position:fixed;inset:0;background:rgba(245,244,240,.9);
-  display:flex;align-items:center;justify-content:center;
-  z-index:9999;flex-direction:column;gap:1rem;
-}
-.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
+#loading-overlay{position:fixed;inset:0;background:rgba(245,244,240,.92);display:none;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:1rem}
+#loading-overlay.visible{display:flex}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-#loading-overlay p{font-size:14px;color:var(--text3)}
+#loading-overlay p{font-size:13px;color:var(--text3)}
 </style>
 </head>
 <body>
 
-<!-- EKRAN LOGOWANIA -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">
-      <span class="ice">🍦</span>
-      <h1>Lodziarnia Manager</h1>
-      <p>System zarządzania lodziarnią</p>
-    </div>
-    <div class="login-field">
-      <label>Login</label>
-      <input type="text" id="l-login" placeholder="Wpisz login" autocomplete="username">
-    </div>
-    <div class="login-field">
-      <label>Hasło</label>
-      <input type="password" id="l-pass" placeholder="Wpisz hasło" autocomplete="current-password">
-    </div>
-    <button class="login-btn" id="l-btn" onclick="doLogin()">Zaloguj się</button>
-    <div class="login-error" id="l-err"></div>
-    <div class="login-spinner" id="l-spin">⏳ Weryfikuję dane logowania…</div>
+<!-- SETUP: wpisanie GAS URL -->
+<div id="setup-screen">
+  <div class="setup-card">
+    <h2>🔧 Konfiguracja połączenia</h2>
+    <p>Wklej poniżej URL swojego wdrożenia Google Apps Script.<br>
+    Znajdziesz go w Apps Script → Wdróż → Zarządzaj wdrożeniami.</p>
+    <div class="setup-err" id="setup-err"></div>
+    <input class="setup-input" id="setup-url" type="url"
+      placeholder="https://script.google.com/macros/s/AKfycb.../exec">
+    <button class="setup-btn" onclick="saveSetup()">Zapisz i połącz</button>
+    <p class="setup-note">URL zostanie zapisany w przeglądarce — nie musisz go wpisywać przy każdym wejściu.<br>
+    Aby zmienić URL, kliknij "Zmień serwer" na ekranie logowania.</p>
   </div>
 </div>
 
-<!-- GŁÓWNA APLIKACJA -->
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <span>🍦</span>
+      <h1>Lodziarnia Manager</h1>
+      <p>System zarządzania lodziarnią</p>
+    </div>
+    <div class="lf"><label>Login</label>
+      <input type="text" id="l-login" placeholder="Wpisz login" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('l-pass').focus()">
+    </div>
+    <div class="lf"><label>Hasło</label>
+      <input type="password" id="l-pass" placeholder="Wpisz hasło" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" id="l-btn" onclick="doLogin()">Zaloguj się</button>
+    <div class="l-err" id="l-err"></div>
+    <p class="l-change"><a onclick="showSetup()">Zmień serwer (GAS URL)</a></p>
+  </div>
+</div>
+
+<!-- APLIKACJA -->
 <div id="app">
-  <div id="loading-overlay" style="display:none">
+  <div id="loading-overlay">
     <div class="spinner"></div>
-    <p id="loading-text">Wczytuję dane…</p>
+    <p id="loading-text">Wczytuję…</p>
   </div>
 
   <div class="header">
-    <span style="font-size:20px">🍦</span>
+    <span style="font-size:19px">🍦</span>
     <span class="header-logo">Lodziarnia Manager</span>
     <span class="header-date" id="cur-date"></span>
     <div class="header-user">
-      <div class="sync-pill" id="sync-pill">
-        <span class="pulse"></span>
-        <span id="sync-label">Łączę…</span>
-      </div>
+      <div class="sync-pill" id="sync-pill"><span class="pulse"></span><span id="sync-label">…</span></div>
       <span class="user-badge" id="user-badge"></span>
       <button class="logout-btn" onclick="doLogout()">Wyloguj</button>
     </div>
   </div>
-
   <div class="nav" id="nav"></div>
 
   <div class="main">
@@ -238,15 +203,12 @@ tr:hover td{background:#fafaf8}
         <button class="btn" style="margin-top:.5rem" onclick="addDItem()">+ Dodaj pozycję</button>
         <div class="div"></div>
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <span style="font-size:13px;color:var(--text2)">Koszt łączny: </span>
-            <span id="d-tot" style="font-size:18px;font-weight:600">0,00 zł</span>
-          </div>
+          <div><span style="font-size:13px;color:var(--text2)">Koszt łączny: </span>
+            <span id="d-tot" style="font-size:18px;font-weight:600">0,00 zł</span></div>
           <button class="btn btn-g" onclick="saveDelivery()">✓ Zapisz dostawę</button>
         </div>
       </div>
-      <h2>Historia dostaw</h2>
-      <div id="d-hist"></div>
+      <h2>Historia dostaw</h2><div id="d-hist"></div>
     </div>
 
     <div id="p-stock" class="panel">
@@ -318,8 +280,8 @@ tr:hover td{background:#fafaf8}
           <div style="margin-bottom:.5rem"><label>Pracownik</label><select id="w-emp"></select></div>
           <div style="margin-bottom:.5rem"><label>Data</label><input type="date" id="w-date"></div>
           <div class="row" style="margin-bottom:.5rem">
-            <div class="fg"><label>Od (godz.)</label><input type="time" id="w-from"></div>
-            <div class="fg"><label>Do (godz.)</label><input type="time" id="w-to"></div>
+            <div class="fg"><label>Od</label><input type="time" id="w-from"></div>
+            <div class="fg"><label>Do</label><input type="time" id="w-to"></div>
           </div>
           <button class="btn btn-g" onclick="addWork()">Zapisz czas pracy</button>
         </div>
@@ -354,716 +316,634 @@ tr:hover td{background:#fafaf8}
 
 <script>
 // ============================================================
-// KONFIGURACJA — wpisz tu URL swojego Apps Script po wdrożeniu
+// STAN GLOBALNY
 // ============================================================
-const GAS_URL = https://script.google.com/macros/s/AKfycbxlK1Iad4_O6mmzGoSGCJ-R6CNPy3HxjQ4Nj8LR0KvOTnBQgYBCx_Cr3I6tHanQlu5W/exec;
-// Przykład: 'https://script.google.com/macros/s/AKfycb.../exec'
+let GAS_URL     = localStorage.getItem('lod_gas_url') || '';
+let TOKEN       = sessionStorage.getItem('lod_token')  || '';
+let CURRENT_USER = '';
+let USER_TABS   = [];
 
-// ============================================================
-// STAN APLIKACJI (wyłącznie z Sheets, bez localStorage)
-// ============================================================
-let TOKEN = sessionStorage.getItem('lod_token') || null;
-let CURRENT_USER = null;
-let USER_TABS = [];
+const TD = new Date().toISOString().split('T')[0];
+document.getElementById('cur-date').textContent =
+  new Date().toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('d-date').value  = TD;
+document.getElementById('sl-date').value = TD;
+document.getElementById('w-date').value  = TD;
 
 let S = {
   flavors:[], deliveries:[], sales:[], employees:[], works:[],
   nf:1, nd:1, ns:1, ne:1, nw:1
 };
-
 const DEFAULT_FLAVORS = [
-  {id:1,name:'Wanilia',color:'#D4AA20',price:22,stock:12,thr:4},
-  {id:2,name:'Czekolada',color:'#6B3A2A',price:24,stock:8,thr:4},
-  {id:3,name:'Truskawka',color:'#E8507A',price:26,stock:5.5,thr:3},
-  {id:4,name:'Mięta',color:'#1D9E75',price:28,stock:3,thr:3},
-  {id:5,name:'Pistacja',color:'#7BA05B',price:35,stock:7,thr:2},
+  {id:1,name:'Wanilia',   color:'#D4AA20',price:22,stock:12, thr:4},
+  {id:2,name:'Czekolada', color:'#6B3A2A',price:24,stock:8,  thr:4},
+  {id:3,name:'Truskawka', color:'#E8507A',price:26,stock:5.5,thr:3},
+  {id:4,name:'Mięta',     color:'#1D9E75',price:28,stock:3,  thr:3},
+  {id:5,name:'Pistacja',  color:'#7BA05B',price:35,stock:7,  thr:2},
 ];
 
-const TD = new Date().toISOString().split('T')[0];
-window.addEventListener('DOMContentLoaded', () => {
-  const el = document.getElementById('cur-date');
-  if (el) el.textContent = new Date().toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-});
+// ============================================================
+// NAWIGACJA EKRANÓW
+// ============================================================
+function showScreen(name) {
+  ['setup-screen','login-screen','app'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.display = 'none';
+    el.classList.remove('visible');
+  });
+  const t = document.getElementById(name);
+  t.style.display = (name === 'app') ? 'block' : 'flex';
+  t.classList.add('visible');
+}
+
+function showSetup() {
+  document.getElementById('setup-url').value = GAS_URL || '';
+  document.getElementById('setup-err').style.display = 'none';
+  showScreen('setup-screen');
+}
+
+function saveSetup() {
+  const url = document.getElementById('setup-url').value.trim();
+  const errEl = document.getElementById('setup-err');
+  if (!url || !url.includes('script.google.com')) {
+    errEl.textContent = 'Podaj prawidłowy URL (powinien zawierać script.google.com)';
+    errEl.style.display = 'block';
+    return;
+  }
+  GAS_URL = url.endsWith('/exec') ? url : url + (url.includes('?') ? '' : '/exec');
+  // Upewnij się że kończy się /exec
+  if (!GAS_URL.endsWith('/exec')) GAS_URL = GAS_URL.split('?')[0];
+  if (!GAS_URL.endsWith('/exec')) GAS_URL += '/exec';
+  localStorage.setItem('lod_gas_url', GAS_URL);
+  showScreen('login-screen');
+}
 
 // ============================================================
-// API — JSONP (jedyna metoda działająca z GAS bez CORS)
+// JSONP — jedyna metoda komunikacji z GAS bez CORS
 // ============================================================
 let _cbIdx = 0;
 
-function gasCall(params, timeoutMs = 25000) {
-  return new Promise((resolve, reject) => {
-    if (!GAS_URL || GAS_URL.indexOf('script.google.com') === -1) {
-      return reject(new Error('Nieprawidłowy GAS_URL. Wpisz URL swojego wdrożenia Apps Script.'));
+function gasCall(params) {
+  return new Promise(function(resolve, reject) {
+    var cbName = '__cb' + (++_cbIdx) + '_' + Date.now();
+
+    var timer = setTimeout(function() {
+      delete window[cbName];
+      var s = document.getElementById('_gs_' + cbName);
+      if (s) s.remove();
+      reject(new Error('Brak odpowiedzi po 20s.\nSprawdź:\n1. Czy URL jest poprawny?\n2. Czy wdrożenie ma dostęp "Wszyscy"?\n3. Czy kliknąłeś "Nowe wdrożenie" (nie aktualizację)?'));
+    }, 20000);
+
+    window[cbName] = function(data) {
+      clearTimeout(timer);
+      delete window[cbName];
+      var s = document.getElementById('_gs_' + cbName);
+      if (s) s.remove();
+      if (data && data.ok === true)  resolve(data.data);
+      else reject(new Error(data && data.error ? data.error : 'Błąd serwera'));
+    };
+
+    var qs = '';
+    for (var k in params) {
+      if (qs) qs += '&';
+      qs += encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
     }
 
-    const cbName = '__gasCb' + (++_cbIdx);
-    const script = document.createElement('script');
-
-    const cleanup = () => {
-      delete window[cbName];
-      try { document.head.removeChild(script); } catch(e) {}
-    };
-
-    const timer = setTimeout(() => {
-      cleanup();
-      reject(new Error('Timeout (25s) — sprawdź czy wdrożenie działa i czy "Kto ma dostęp" = Wszyscy'));
-    }, timeoutMs);
-
-    window[cbName] = (json) => {
-      clearTimeout(timer);
-      cleanup();
-      if (json && json.ok) resolve(json.data);
-      else reject(new Error((json && json.error) || 'Błąd serwera'));
-    };
-
-    script.onerror = (e) => {
-      clearTimeout(timer);
-      cleanup();
-      reject(new Error('Błąd ładowania skryptu GAS — sprawdź URL i dostęp "Wszyscy"'));
-    };
-
-    const qs = Object.keys(params).map(k =>
-      encodeURIComponent(k) + '=' + encodeURIComponent(params[k])
-    ).join('&');
+    var script = document.createElement('script');
+    script.id  = '_gs_' + cbName;
     script.src = GAS_URL + '?callback=' + cbName + '&' + qs;
+    script.onerror = function() {
+      clearTimeout(timer);
+      delete window[cbName];
+      script.remove();
+      reject(new Error('Nie można połączyć z serwerem.\nSprawdź URL i uprawnienia wdrożenia.'));
+    };
     document.head.appendChild(script);
   });
 }
 
-async function api(params) {
-  return gasCall(params);
-}
-
-async function apiPost(body) {
-  // Kodujemy cały payload jako base64 żeby zmieścić się w URL GET
-  const json    = JSON.stringify(body);
-  const encoded = btoa(unescape(encodeURIComponent(json)));
-  return gasCall({ action: 'write_encoded', token: body.token, payload: encoded });
-}
-
-function setSyncStatus(type, txt) {
-  const el = document.getElementById('sync-pill');
-  if (el) { el.className = 'sync-pill ' + type; }
-  const lb = document.getElementById('sync-label');
-  if (lb) lb.textContent = txt;
-}
-
-// ============================================================
-// LOGOWANIE / WYLOGOWANIE
-// ============================================================
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('l-pass').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doLogin();
-  });
-  document.getElementById('l-login').addEventListener('keydown', e => {
-    if (e.key === 'Enter') document.getElementById('l-pass').focus();
-  });
-});
-
-async function doLogin() {
-  const login = document.getElementById('l-login').value.trim();
-  const pass  = document.getElementById('l-pass').value;
-  const btn   = document.getElementById('l-btn');
-
-  if (!login || !pass) { showLoginErr('Wpisz login i hasło'); return; }
-  if (!GAS_URL || GAS_URL.indexOf('script.google.com') === -1) {
-    showLoginErr('Błąd konfiguracji: nieprawidłowy GAS_URL w pliku HTML');
-    return;
+async function apiWrite(sheetName, data) {
+  setSyncStatus('busy','Zapisuję…');
+  var payload = JSON.stringify({sheet: sheetName, data: data});
+  var b64 = btoa(unescape(encodeURIComponent(payload)));
+  try {
+    await gasCall({action:'write_encoded', token:TOKEN, payload:b64});
+    setSyncStatus('ok','Zsynchronizowano ✓');
+  } catch(e) {
+    setSyncStatus('err','Błąd zapisu');
+    throw e;
   }
+}
 
-  btn.disabled = true;
-  btn.textContent = 'Loguję…';
-  document.getElementById('l-err').style.display = 'none';
-  document.getElementById('l-spin').style.display = 'block';
+// ============================================================
+// SETUP / LOGIN / LOGOUT
+// ============================================================
+async function doLogin() {
+  var login = document.getElementById('l-login').value.trim();
+  var pass  = document.getElementById('l-pass').value;
+  var btn   = document.getElementById('l-btn');
+  var errEl = document.getElementById('l-err');
+
+  errEl.style.display = 'none';
+  if (!login || !pass) { showErr('Wpisz login i hasło'); return; }
+  if (!GAS_URL)        { showErr('Brak URL serwera — kliknij "Zmień serwer"'); return; }
+
+  btn.disabled    = true;
+  btn.textContent = '⏳ Loguję…';
 
   try {
-    const data = await api({ action: 'login', login: login, password: pass });
-    TOKEN       = data.token;
+    var data = await gasCall({action:'login', login:login, password:pass});
+    TOKEN        = data.token;
     CURRENT_USER = data.login;
-    USER_TABS   = data.tabs;
+    USER_TABS    = data.tabs;
     sessionStorage.setItem('lod_token', TOKEN);
     await startApp();
   } catch(e) {
-    showLoginErr(e.message || 'Błąd logowania — spróbuj ponownie');
+    showErr(e.message || 'Błąd logowania');
   } finally {
     btn.disabled    = false;
     btn.textContent = 'Zaloguj się';
-    document.getElementById('l-spin').style.display = 'none';
+  }
+
+  function showErr(msg) {
+    errEl.innerHTML = msg.replace(/\n/g,'<br>');
+    errEl.style.display = 'block';
   }
 }
 
-function showLoginErr(msg) {
-  const el = document.getElementById('l-err');
-  el.textContent = '⚠ ' + msg;
-  el.style.display = 'block';
+async function doLogout() {
+  try { await gasCall({action:'logout', token:TOKEN}); } catch(e){}
+  TOKEN = ''; CURRENT_USER = ''; USER_TABS = [];
+  sessionStorage.removeItem('lod_token');
+  showScreen('login-screen');
 }
 
-async function doLogout() {
-  try { await api({ action: 'logout', token: TOKEN }); } catch(e) {}
-  TOKEN        = null;
-  CURRENT_USER = null;
-  USER_TABS    = [];
-  sessionStorage.removeItem('lod_token');
-  document.getElementById('app').style.display          = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('l-pass').value               = '';
-  document.getElementById('l-err').style.display        = 'none';
+function setSyncStatus(type, txt) {
+  var el = document.getElementById('sync-pill');
+  if (el) el.className = 'sync-pill ' + type;
+  var lb = document.getElementById('sync-label');
+  if (lb) lb.textContent = txt;
 }
 
 // ============================================================
 // START APLIKACJI
 // ============================================================
-async function startApp() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-
-  // Badge użytkownika
-  document.getElementById('user-badge').textContent = CURRENT_USER;
-
-  // Zbuduj nawigację wg uprawnień
-  buildNav();
-
-  // Wczytaj dane z Sheets
-  showLoading('Wczytuję dane z Google Sheets…');
-  try {
-    await loadAllData();
-    setSyncStatus('ok', 'Połączono ✓');
-  } catch(e) {
-    setSyncStatus('err', 'Błąd połączenia');
-    alert('Błąd wczytywania danych: ' + e.message);
-  }
-  hideLoading();
-
-  // Pokaż pierwszą dostępną zakładkę
-  if (USER_TABS.length > 0) sw(USER_TABS[0]);
-}
-
-// ============================================================
-// NAWIGACJA
-// ============================================================
 const TAB_DEFS = [
-  { id:'delivery',  label:'📦 Dostawy' },
-  { id:'stock',     label:'🧊 Magazyn' },
-  { id:'sales',     label:'💰 Sprzedaż' },
-  { id:'employees', label:'👥 Pracownicy' },
-  { id:'summary',   label:'📊 Wyniki' },
+  {id:'delivery',  label:'📦 Dostawy'},
+  {id:'stock',     label:'🧊 Magazyn'},
+  {id:'sales',     label:'💰 Sprzedaż'},
+  {id:'employees', label:'👥 Pracownicy'},
+  {id:'summary',   label:'📊 Wyniki'},
 ];
 
-function buildNav() {
-  const nav = document.getElementById('nav');
+async function startApp() {
+  document.getElementById('user-badge').textContent = CURRENT_USER;
+  var nav = document.getElementById('nav');
   nav.innerHTML = '';
-  TAB_DEFS.forEach(t => {
+  TAB_DEFS.forEach(function(t) {
     if (!USER_TABS.includes(t.id)) return;
-    const btn = document.createElement('button');
-    btn.className = 'tab';
-    btn.textContent = t.label;
-    btn.dataset.tab = t.id;
-    btn.onclick = () => sw(t.id);
-    nav.appendChild(btn);
+    var b = document.createElement('button');
+    b.className   = 'tab';
+    b.textContent = t.label;
+    b.dataset.tab = t.id;
+    b.onclick     = function(){ sw(t.id); };
+    nav.appendChild(b);
   });
+
+  showScreen('app');
+  showLoading('Wczytuję dane z Google Sheets…');
+  try {
+    await loadAll();
+    setSyncStatus('ok','Połączono ✓');
+  } catch(e) {
+    setSyncStatus('err','Błąd');
+    alert('Błąd wczytywania danych:\n' + e.message);
+  }
+  hideLoading();
+  if (USER_TABS.length) sw(USER_TABS[0]);
 }
 
 function sw(n) {
   if (!USER_TABS.includes(n)) return;
-  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === n));
-  TAB_DEFS.forEach(t => {
-    const el = document.getElementById('p-' + t.id);
-    if (el) el.classList.toggle('active', t.id === n);
+  document.querySelectorAll('.tab').forEach(function(b){ b.classList.toggle('active', b.dataset.tab===n); });
+  TAB_DEFS.forEach(function(t){
+    var el = document.getElementById('p-'+t.id);
+    if (el) el.classList.toggle('active', t.id===n);
   });
-  if (n==='stock') rStock();
-  if (n==='sales') rSales();
+  if (n==='stock')     rStock();
+  if (n==='sales')     rSales();
   if (n==='employees') rEmps();
-  if (n==='summary') rSummary();
-  if (n==='delivery') rDHist();
+  if (n==='summary')   rSummary();
+  if (n==='delivery')  rDHist();
 }
 
-// ============================================================
-// LOADING OVERLAY
-// ============================================================
 function showLoading(txt) {
-  document.getElementById('loading-text').textContent = txt || 'Wczytuję…';
-  document.getElementById('loading-overlay').style.display = 'flex';
+  var ol = document.getElementById('loading-overlay');
+  document.getElementById('loading-text').textContent = txt||'Wczytuję…';
+  ol.style.display = 'flex';
 }
-function hideLoading() {
-  document.getElementById('loading-overlay').style.display = 'none';
-}
+function hideLoading() { document.getElementById('loading-overlay').style.display = 'none'; }
 
 // ============================================================
-// PERSISTENCE — wszystko przez Sheets
+// DANE — wczytywanie z Sheets
 // ============================================================
-async function loadAllData() {
-  const [flavorsRaw, salesRaw, delivRaw, empsRaw, worksRaw] = await Promise.all([
-    readSheet('flavors'),
-    readSheet('sales'),
-    readSheet('deliveries'),
-    readSheet('employees'),
-    readSheet('works'),
+async function readSheet(name) {
+  try { return await gasCall({action:'read', token:TOKEN, sheet:name}); }
+  catch(e) { return []; }
+}
+
+function parseRows(raw, fn) {
+  if (!raw || raw.length < 2) return [];
+  return raw.slice(1).filter(function(r){ return r[0]!==''&&r[0]!=null; }).map(fn);
+}
+function tryJ(s,d){ try{return JSON.parse(s);}catch(e){return d;} }
+
+async function loadAll() {
+  var results = await Promise.all([
+    readSheet('flavors'), readSheet('sales'), readSheet('deliveries'),
+    readSheet('employees'), readSheet('works')
   ]);
+  var fr=results[0], sr=results[1], dr=results[2], er=results[3], wr=results[4];
 
-  S.flavors = parseSheet(flavorsRaw, r => ({
-    id:+r[0], name:r[1], color:r[2], price:+r[3], stock:+r[4], thr:+r[5]
-  }));
+  S.flavors = parseRows(fr, function(r){return {id:+r[0],name:r[1],color:r[2],price:+r[3],stock:+r[4],thr:+r[5]};});
   if (!S.flavors.length) {
     S.flavors = JSON.parse(JSON.stringify(DEFAULT_FLAVORS));
-    await writeSheet('flavors', flavorsToRows());
+    await apiWrite('flavors', fl2rows());
   }
+  S.sales = parseRows(sr, function(r){return {id:+r[0],date:r[1],time:r[2],seller:String(r[3]),fid:+r[4],qty:+r[5],price:+r[6],tot:+r[7],note:r[8]||''};});
+  S.deliveries = parseRows(dr, function(r){return {id:+r[0],date:r[1],sup:r[2],inv:r[3]||'',tot:+r[4],items:tryJ(r[5],[])};});
+  S.employees = parseRows(er, function(r){return {id:+r[0],name:r[1],rate:+r[2]};});
+  S.works = parseRows(wr, function(r){return {id:+r[0],eid:+r[1],date:r[2],fr:r[3],to:r[4],h:+r[5]};});
 
-  S.sales = parseSheet(salesRaw, r => ({
-    id:+r[0], date:r[1], time:r[2], seller:String(r[3]), fid:+r[4],
-    qty:+r[5], price:+r[6], tot:+r[7], note:r[8]||''
-  }));
-
-  S.deliveries = parseSheet(delivRaw, r => ({
-    id:+r[0], date:r[1], sup:r[2], inv:r[3]||'', tot:+r[4],
-    items: tryParse(r[5], [])
-  }));
-
-  S.employees = parseSheet(empsRaw, r => ({
-    id:+r[0], name:r[1], rate:+r[2]
-  }));
-
-  S.works = parseSheet(worksRaw, r => ({
-    id:+r[0], eid:+r[1], date:r[2], fr:r[3], to:r[4], h:+r[5]
-  }));
-
-  // Ustal następne ID
-  S.nf = S.flavors.length ? Math.max(...S.flavors.map(x=>x.id)) + 1 : 1;
-  S.nd = S.deliveries.length ? Math.max(...S.deliveries.map(x=>x.id)) + 1 : 1;
-  S.ns = S.sales.length ? Math.max(...S.sales.map(x=>x.id)) + 1 : 1;
-  S.ne = S.employees.length ? Math.max(...S.employees.map(x=>x.id)) + 1 : 1;
-  S.nw = S.works.length ? Math.max(...S.works.map(x=>x.id)) + 1 : 1;
-
+  S.nf = S.flavors.length    ? Math.max.apply(null,S.flavors.map(function(x){return x.id;}))+1    : 1;
+  S.nd = S.deliveries.length ? Math.max.apply(null,S.deliveries.map(function(x){return x.id;}))+1 : 1;
+  S.ns = S.sales.length      ? Math.max.apply(null,S.sales.map(function(x){return x.id;}))+1      : 1;
+  S.ne = S.employees.length  ? Math.max.apply(null,S.employees.map(function(x){return x.id;}))+1  : 1;
+  S.nw = S.works.length      ? Math.max.apply(null,S.works.map(function(x){return x.id;}))+1      : 1;
   rSelects();
 }
 
-async function readSheet(name) {
-  try {
-    return await api({ action: 'read', token: TOKEN, sheet: name });
-  } catch(e) { return []; }
-}
-
-async function writeSheet(name, rows) {
-  setSyncStatus('busy', 'Zapisuję…');
-  try {
-    await apiPost({ action: 'write', token: TOKEN, sheet: name, data: rows });
-    setSyncStatus('ok', 'Zsynchronizowano ✓');
-  } catch(e) {
-    setSyncStatus('err', 'Błąd zapisu');
-    throw e;
-  }
-}
-
-function parseSheet(raw, mapper) {
-  if (!raw || raw.length < 2) return [];
-  return raw.slice(1).filter(r => r[0] !== '' && r[0] !== null && r[0] !== undefined).map(mapper);
-}
-
-function tryParse(str, def) {
-  try { return JSON.parse(str); } catch(e) { return def; }
-}
+// Row serializers
+function fl2rows(){var r=[['id','name','color','price','stock','thr']];S.flavors.forEach(function(f){r.push([f.id,f.name,f.color,f.price,f.stock,f.thr]);});return r;}
+function sa2rows(){var r=[['id','date','time','seller','fid','qty','price','tot','note']];S.sales.forEach(function(s){r.push([s.id,s.date,s.time,s.seller,s.fid,s.qty,s.price,s.tot,s.note||'']);});return r;}
+function de2rows(){var r=[['id','date','sup','inv','tot','items_json']];S.deliveries.forEach(function(d){r.push([d.id,d.date,d.sup,d.inv||'',d.tot,JSON.stringify(d.items)]);});return r;}
+function em2rows(){var r=[['id','name','rate']];S.employees.forEach(function(e){r.push([e.id,e.name,e.rate]);});return r;}
+function wo2rows(){var r=[['id','eid','date','fr','to','h']];S.works.forEach(function(w){r.push([w.id,w.eid,w.date,w.fr,w.to,w.h]);});return r;}
 
 // ============================================================
-// SERIALIZERS — obiekty → wiersze Sheets
+// HELPERS
 // ============================================================
-function flavorsToRows() {
-  const rows = [['id','name','color','price','stock','thr']];
-  S.flavors.forEach(f => rows.push([f.id,f.name,f.color,f.price,f.stock,f.thr]));
-  return rows;
-}
-function salesToRows() {
-  const rows = [['id','date','time','seller','fid','qty','price','tot','note']];
-  S.sales.forEach(s => rows.push([s.id,s.date,s.time,s.seller,s.fid,s.qty,s.price,s.tot,s.note||'']));
-  return rows;
-}
-function deliveriesToRows() {
-  const rows = [['id','date','sup','inv','tot','items_json']];
-  S.deliveries.forEach(d => rows.push([d.id,d.date,d.sup,d.inv||'',d.tot,JSON.stringify(d.items)]));
-  return rows;
-}
-function employeesToRows() {
-  const rows = [['id','name','rate']];
-  S.employees.forEach(e => rows.push([e.id,e.name,e.rate]));
-  return rows;
-}
-function worksToRows() {
-  const rows = [['id','eid','date','fr','to','h']];
-  S.works.forEach(w => rows.push([w.id,w.eid,w.date,w.fr,w.to,w.h]));
-  return rows;
-}
-
-// ============================================================
-// HELPER FUNCTIONS
-// ============================================================
-function f2(n){return n.toFixed(2).replace('.',',')+' zł'}
-function fD(d){const[y,m,dd]=d.split('-');return dd+'.'+m+'.'+y}
-function fColor(id){const f=S.flavors.find(x=>x.id==id);return f?f.color:'#888'}
-function fName(id){const f=S.flavors.find(x=>x.id==id);return f?f.name:'—'}
-function sName(id){if(id==='own'||id==='0'||id===0) return 'Właściciel';const e=S.employees.find(x=>x.id==id);return e?e.name:'Nieznany'}
-function mKey(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')}
+function f2(n){return n.toFixed(2).replace('.',',')+' zł';}
+function fD(d){var p=d.split('-');return p[2]+'.'+p[1]+'.'+p[0];}
+function fColor(id){var f=S.flavors.find(function(x){return x.id==id;});return f?f.color:'#888';}
+function fName(id){var f=S.flavors.find(function(x){return x.id==id;});return f?f.name:'—';}
+function sName(id){if(id==='own'||id==0)return 'Właściciel';var e=S.employees.find(function(x){return x.id==id;});return e?e.name:'Nieznany';}
+function mKey(){var n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');}
 
 // ============================================================
 // DOSTAWY
 // ============================================================
-let dItems = [];
-
-function addDItem(){dItems.push({fid:'',qty:0,ppk:0});rDForm()}
+var dItems=[];
+function addDItem(){dItems.push({fid:'',qty:0,ppk:0});rDForm();}
+function setDI(i,k,v){dItems[i][k]=v;rDForm();}
+function remDI(i){dItems.splice(i,1);rDForm();}
 
 function rDForm(){
-  const c=document.getElementById('d-items');
-  if(!dItems.length){c.innerHTML='<div class="empty">Brak pozycji. Kliknij "Dodaj pozycję"</div>';document.getElementById('d-tot').textContent='0,00 zł';return}
-  let tot=0;
-  c.innerHTML=dItems.map((it,i)=>{
-    const v=Math.round(it.qty*it.ppk*100)/100;tot+=v;
-    return `<div class="row" style="margin-bottom:.5rem;background:#fafaf8;padding:.5rem;border-radius:8px">
-      <div class="fg"><label>Smak</label>
-        <select onchange="setDI(${i},'fid',+this.value)">
-          <option value="">-- Wybierz smak --</option>
-          ${S.flavors.map(f=>`<option value="${f.id}"${f.id==it.fid?' selected':''}>${f.name} (stan: ${f.stock.toFixed(1)}kg)</option>`).join('')}
-        </select></div>
-      <div class="fg"><label>Ilość (kg)</label><input type="number" value="${it.qty||''}" placeholder="0" step="0.1" onchange="setDI(${i},'qty',+this.value)"></div>
-      <div class="fg"><label>Cena zakupu (zł/kg)</label><input type="number" value="${it.ppk||''}" placeholder="0" step="0.5" onchange="setDI(${i},'ppk',+this.value)"></div>
-      <div style="font-size:13px;font-weight:600;min-width:80px;align-self:flex-end">${f2(v)}</div>
-      <div style="align-self:flex-end"><button class="btn btn-r" onclick="remDI(${i})">✕ Usuń</button></div>
-    </div>`;
+  var c=document.getElementById('d-items');
+  if(!dItems.length){c.innerHTML='<div class="empty">Brak pozycji — kliknij "Dodaj pozycję"</div>';document.getElementById('d-tot').textContent='0,00 zł';return;}
+  var tot=0;
+  c.innerHTML=dItems.map(function(it,i){
+    var v=Math.round(it.qty*it.ppk*100)/100;tot+=v;
+    return '<div class="row" style="margin-bottom:.5rem;background:#fafaf8;padding:.5rem;border-radius:8px">'+
+      '<div class="fg"><label>Smak</label><select onchange="setDI('+i+',\'fid\',+this.value)">'+
+      '<option value="">-- Wybierz --</option>'+
+      S.flavors.map(function(f){return '<option value="'+f.id+'"'+(f.id==it.fid?' selected':'')+'>'+f.name+' ('+f.stock.toFixed(1)+'kg)</option>';}).join('')+
+      '</select></div>'+
+      '<div class="fg"><label>Ilość (kg)</label><input type="number" value="'+(it.qty||'')+'" step="0.1" onchange="setDI('+i+',\'qty\',+this.value)"></div>'+
+      '<div class="fg"><label>Cena zakupu (zł/kg)</label><input type="number" value="'+(it.ppk||'')+'" step="0.5" onchange="setDI('+i+',\'ppk\',+this.value)"></div>'+
+      '<div style="font-size:13px;font-weight:600;min-width:80px;align-self:flex-end">'+f2(v)+'</div>'+
+      '<div style="align-self:flex-end"><button class="btn btn-r" onclick="remDI('+i+')">✕ Usuń</button></div>'+
+      '</div>';
   }).join('');
   document.getElementById('d-tot').textContent=f2(tot);
 }
-function setDI(i,k,v){dItems[i][k]=v;rDForm()}
-function remDI(i){dItems.splice(i,1);rDForm()}
 
 async function saveDelivery(){
-  const date=document.getElementById('d-date').value||TD;
-  const sup=document.getElementById('d-sup').value||'Nieznany dostawca';
-  const inv=document.getElementById('d-inv').value;
-  if(!dItems.length){alert('Dodaj przynajmniej jedną pozycję');return}
-  if(dItems.some(x=>!x.fid||x.qty<=0)){alert('Uzupełnij smak i ilość dla każdej pozycji');return}
-  let tot=0;
-  dItems.forEach(it=>{
-    tot+=it.qty*it.ppk;
-    const f=S.flavors.find(x=>x.id==it.fid);
-    if(f) f.stock=Math.round((f.stock+it.qty)*100)/100;
-  });
-  const delivery={id:S.nd++,date,sup,inv,items:[...dItems],tot};
-  S.deliveries.push(delivery);
+  var date=document.getElementById('d-date').value||TD;
+  var sup=document.getElementById('d-sup').value||'Nieznany';
+  var inv=document.getElementById('d-inv').value;
+  if(!dItems.length){alert('Dodaj pozycję');return;}
+  if(dItems.some(function(x){return !x.fid||x.qty<=0;})){alert('Uzupełnij smak i ilość');return;}
+  var tot=0;
+  dItems.forEach(function(it){tot+=it.qty*it.ppk;var f=S.flavors.find(function(x){return x.id==it.fid;});if(f)f.stock=Math.round((f.stock+it.qty)*100)/100;});
+  S.deliveries.push({id:S.nd++,date:date,sup:sup,inv:inv,items:dItems.slice(),tot:tot});
   dItems=[];
   document.getElementById('d-sup').value='';
   document.getElementById('d-inv').value='';
   rDForm();rDHist();
   showLoading('Zapisuję dostawę…');
-  try {
-    await Promise.all([writeSheet('deliveries',deliveriesToRows()), writeSheet('flavors',flavorsToRows())]);
-  } catch(e) { alert('Błąd zapisu: '+e.message); }
+  try{await Promise.all([apiWrite('deliveries',de2rows()),apiWrite('flavors',fl2rows())]);}catch(e){alert('Błąd: '+e.message);}
   hideLoading();
 }
 
 function rDHist(){
-  const el=document.getElementById('d-hist');
-  if(!S.deliveries.length){el.innerHTML='<div class="card"><div class="empty">Brak historii dostaw</div></div>';return}
-  el.innerHTML=[...S.deliveries].sort((a,b)=>b.date.localeCompare(a.date)).map(d=>`
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem">
-        <div><span style="font-weight:600;font-size:15px">${d.sup}</span>${d.inv?`<span style="font-size:12px;color:var(--text3);margin-left:8px">${d.inv}</span>`:''}</div>
-        <div style="text-align:right"><div style="font-size:15px;font-weight:600">${f2(d.tot)}</div><div style="font-size:12px;color:var(--text3)">${fD(d.date)}</div></div>
-      </div>
-      <table><thead><tr><th>Smak</th><th>Ilość</th><th>Cena zakupu/kg</th><th>Wartość</th></tr></thead>
-      <tbody>${d.items.map(it=>`<tr><td><span class="dot" style="background:${fColor(it.fid)}"></span><b>${fName(it.fid)}</b></td><td>${it.qty} kg</td><td>${f2(it.ppk)}</td><td>${f2(it.qty*it.ppk)}</td></tr>`).join('')}</tbody></table>
-    </div>`).join('');
+  var el=document.getElementById('d-hist');
+  if(!S.deliveries.length){el.innerHTML='<div class="card"><div class="empty">Brak historii dostaw</div></div>';return;}
+  el.innerHTML=[].concat(S.deliveries).sort(function(a,b){return b.date.localeCompare(a.date);}).map(function(d){
+    return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem">'+
+      '<div><span style="font-weight:600;font-size:15px">'+d.sup+'</span>'+(d.inv?'<span style="font-size:12px;color:var(--text3);margin-left:8px">'+d.inv+'</span>':'')+
+      '</div><div style="text-align:right"><div style="font-size:15px;font-weight:600">'+f2(d.tot)+'</div><div style="font-size:12px;color:var(--text3)">'+fD(d.date)+'</div></div></div>'+
+      '<table><thead><tr><th>Smak</th><th>Ilość</th><th>Cena/kg</th><th>Wartość</th></tr></thead><tbody>'+
+      d.items.map(function(it){return '<tr><td><span class="dot" style="background:'+fColor(it.fid)+'"></span><b>'+fName(it.fid)+'</b></td><td>'+it.qty+' kg</td><td>'+f2(it.ppk)+'</td><td>'+f2(it.qty*it.ppk)+'</td></tr>';}).join('')+
+      '</tbody></table></div>';
+  }).join('');
 }
 
 // ============================================================
 // MAGAZYN
 // ============================================================
 async function addFlavor(){
-  const n=document.getElementById('s-name').value.trim();
-  const c=document.getElementById('s-color').value||'#888780';
-  const p=+document.getElementById('s-price').value;
-  const t=+document.getElementById('s-thr').value||3;
-  if(!n||!p){alert('Podaj nazwę i cenę bazową');return}
+  var n=document.getElementById('s-name').value.trim();
+  var c=document.getElementById('s-color').value||'#888';
+  var p=+document.getElementById('s-price').value;
+  var t=+document.getElementById('s-thr').value||3;
+  if(!n||!p){alert('Podaj nazwę i cenę');return;}
   S.flavors.push({id:S.nf++,name:n,color:c,price:p,stock:0,thr:t});
   document.getElementById('s-name').value='';
   document.getElementById('s-price').value='';
   document.getElementById('s-thr').value='';
-  showLoading('Zapisuję smak…');
-  try { await writeSheet('flavors',flavorsToRows()); } catch(e) { alert('Błąd: '+e.message); }
-  hideLoading();
-  rStock();rSelects();
+  showLoading('Zapisuję…');
+  try{await apiWrite('flavors',fl2rows());}catch(e){alert('Błąd: '+e.message);}
+  hideLoading();rStock();rSelects();
 }
 
 function rStock(){
-  const tot=S.flavors.reduce((s,f)=>s+f.stock,0);
-  const low=S.flavors.filter(f=>f.stock<=f.thr&&f.stock>0);
-  const empty=S.flavors.filter(f=>f.stock===0);
-  let alertHtml='';
-  if(empty.length) alertHtml+=`<div class="alert-warn">⚠️ Brak towaru: ${empty.map(f=>`<b>${f.name}</b>`).join(', ')}</div>`;
-  if(low.length) alertHtml+=`<div class="alert-info">ℹ️ Niski stan: ${low.map(f=>`<b>${f.name}</b> (${f.stock.toFixed(1)} kg)`).join(', ')}</div>`;
-  document.getElementById('st-alerts').innerHTML=alertHtml;
-  document.getElementById('st-met').innerHTML=`
-    <div class="met"><div class="l">Łączny zapas</div><div class="v">${tot.toFixed(1)} kg</div></div>
-    <div class="met"><div class="l">Smaków</div><div class="v">${S.flavors.length}</div></div>
-    <div class="met"><div class="l">Alerty</div><div class="v" style="color:${(low.length+empty.length)?'var(--red)':'var(--green)'}">${low.length+empty.length}</div></div>
-    <div class="met"><div class="l">Wartość magazynu</div><div class="v">${f2(S.flavors.reduce((s,f)=>s+f.stock*f.price,0))}</div></div>`;
-  document.getElementById('st-body').innerHTML=S.flavors.map(f=>{
-    const pct=Math.min(100,Math.round(f.stock/(Math.max(f.thr*4,1))*100));
-    const st=f.stock===0?`<span class="tag tr">Brak</span>`:f.stock<=f.thr?`<span class="tag ta">Niski</span>`:`<span class="tag tg">OK</span>`;
-    const fc=f.stock===0?'var(--red)':f.stock<=f.thr?'var(--amber)':f.color;
-    return `<tr>
-      <td><span class="dot" style="background:${f.color}"></span><b>${f.name}</b></td>
-      <td>${f.stock.toFixed(1)} kg<div class="bar"><div class="bfill" style="width:${pct}%;background:${fc}"></div></div></td>
-      <td>${f.thr} kg</td><td>${f2(f.price)}/kg</td><td>${f2(f.stock*f.price)}</td><td>${st}</td>
-      <td style="white-space:nowrap">
-        <input type="number" id="adj-${f.id}" step="0.1" placeholder="±kg" style="width:75px;height:28px;font-size:12px;display:inline-block">
-        <button class="btn" style="height:28px;font-size:12px;padding:0 8px;margin-left:3px" onclick="adjStock(${f.id})">Koryguj</button>
-      </td></tr>`;
+  var tot=S.flavors.reduce(function(s,f){return s+f.stock;},0);
+  var low=S.flavors.filter(function(f){return f.stock<=f.thr&&f.stock>0;});
+  var empty=S.flavors.filter(function(f){return f.stock===0;});
+  var ah='';
+  if(empty.length)ah+='<div class="alert-warn">⚠️ Brak towaru: '+empty.map(function(f){return '<b>'+f.name+'</b>';}).join(', ')+'</div>';
+  if(low.length)ah+='<div class="alert-info">ℹ️ Niski stan: '+low.map(function(f){return '<b>'+f.name+'</b> ('+f.stock.toFixed(1)+' kg)';}).join(', ')+'</div>';
+  document.getElementById('st-alerts').innerHTML=ah;
+  document.getElementById('st-met').innerHTML=
+    '<div class="met"><div class="l">Łączny zapas</div><div class="v">'+tot.toFixed(1)+' kg</div></div>'+
+    '<div class="met"><div class="l">Smaków</div><div class="v">'+S.flavors.length+'</div></div>'+
+    '<div class="met"><div class="l">Alerty</div><div class="v" style="color:'+(low.length+empty.length?'var(--red)':'var(--green)')+'">'+( low.length+empty.length)+'</div></div>'+
+    '<div class="met"><div class="l">Wartość magazynu</div><div class="v">'+f2(S.flavors.reduce(function(s,f){return s+f.stock*f.price;},0))+'</div></div>';
+  document.getElementById('st-body').innerHTML=S.flavors.map(function(f){
+    var pct=Math.min(100,Math.round(f.stock/(Math.max(f.thr*4,1))*100));
+    var st=f.stock===0?'<span class="tag tr">Brak</span>':f.stock<=f.thr?'<span class="tag ta">Niski</span>':'<span class="tag tg">OK</span>';
+    var fc=f.stock===0?'var(--red)':f.stock<=f.thr?'var(--amber)':f.color;
+    return '<tr><td><span class="dot" style="background:'+f.color+'"></span><b>'+f.name+'</b></td>'+
+      '<td>'+f.stock.toFixed(1)+' kg<div class="bar"><div class="bfill" style="width:'+pct+'%;background:'+fc+'"></div></div></td>'+
+      '<td>'+f.thr+' kg</td><td>'+f2(f.price)+'/kg</td><td>'+f2(f.stock*f.price)+'</td><td>'+st+'</td>'+
+      '<td style="white-space:nowrap"><input type="number" id="adj-'+f.id+'" step="0.1" placeholder="±kg" style="width:72px;height:28px;font-size:12px;display:inline-block">'+
+      '<button class="btn" style="height:28px;font-size:12px;padding:0 7px;margin-left:3px" onclick="adjStock('+f.id+')">Koryguj</button></td></tr>';
   }).join('');
 }
 
 async function adjStock(id){
-  const inp=document.getElementById('adj-'+id);
-  const v=parseFloat(inp.value);
-  if(isNaN(v)){alert('Podaj wartość korekty');return}
-  const f=S.flavors.find(x=>x.id===id);
+  var inp=document.getElementById('adj-'+id);
+  var v=parseFloat(inp.value);
+  if(isNaN(v)){alert('Podaj wartość korekty');return;}
+  var f=S.flavors.find(function(x){return x.id===id;});
   f.stock=Math.max(0,Math.round((f.stock+v)*100)/100);
   inp.value='';
-  showLoading('Zapisuję korektę…');
-  try { await writeSheet('flavors',flavorsToRows()); } catch(e) { alert('Błąd: '+e.message); }
-  hideLoading();
-  rStock();
+  showLoading('Zapisuję…');try{await apiWrite('flavors',fl2rows());}catch(e){alert('Błąd: '+e.message);}hideLoading();rStock();
 }
 
 // ============================================================
 // SELECTS
 // ============================================================
 function rSelects(){
-  const ss=document.getElementById('sl-seller');
-  if(ss){const cs=ss.value;ss.innerHTML=`<option value="own">Właściciel</option>`+S.employees.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');if(cs)ss.value=cs;}
-  const sf=document.getElementById('sl-flav');
-  if(sf){const cf=sf.value;sf.innerHTML=`<option value="">-- Wybierz smak --</option>`+S.flavors.map(f=>`<option value="${f.id}">${f.name} (${f.stock.toFixed(1)} kg)</option>`).join('');if(cf)sf.value=cf;}
-  const we=document.getElementById('w-emp');
-  if(we){const ce=we.value;we.innerHTML=`<option value="">-- Wybierz pracownika --</option>`+S.employees.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');if(ce)we.value=ce;}
+  var ss=document.getElementById('sl-seller');
+  if(ss){var cs=ss.value;ss.innerHTML='<option value="own">Właściciel</option>'+S.employees.map(function(e){return '<option value="'+e.id+'">'+e.name+'</option>';}).join('');if(cs)ss.value=cs;}
+  var sf=document.getElementById('sl-flav');
+  if(sf){var cf=sf.value;sf.innerHTML='<option value="">-- Wybierz smak --</option>'+S.flavors.map(function(f){return '<option value="'+f.id+'">'+f.name+' ('+f.stock.toFixed(1)+' kg)</option>';}).join('');if(cf)sf.value=cf;}
+  var we=document.getElementById('w-emp');
+  if(we){var ce=we.value;we.innerHTML='<option value="">-- Wybierz --</option>'+S.employees.map(function(e){return '<option value="'+e.id+'">'+e.name+'</option>';}).join('');if(ce)we.value=ce;}
 }
 
 // ============================================================
 // SPRZEDAŻ
 // ============================================================
 async function addSale(){
-  const date=document.getElementById('sl-date').value||TD;
-  const seller=document.getElementById('sl-seller').value;
-  const fid=+document.getElementById('sl-flav').value;
-  const qty=+document.getElementById('sl-qty').value;
-  const price=+document.getElementById('sl-price').value;
-  const note=document.getElementById('sl-note').value;
-  if(!fid||qty<=0||price<=0){alert('Uzupełnij smak, ilość i cenę');return}
-  const f=S.flavors.find(x=>x.id===fid);
-  if(!f) return;
-  if(f.stock<qty){alert(`Niewystarczający stan!\nDostępne: ${f.stock.toFixed(1)} kg`);return}
-  const now=new Date();
-  const time=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  var date=document.getElementById('sl-date').value||TD;
+  var seller=document.getElementById('sl-seller').value;
+  var fid=+document.getElementById('sl-flav').value;
+  var qty=+document.getElementById('sl-qty').value;
+  var price=+document.getElementById('sl-price').value;
+  var note=document.getElementById('sl-note').value;
+  if(!fid||qty<=0||price<=0){alert('Uzupełnij smak, ilość i cenę');return;}
+  var f=S.flavors.find(function(x){return x.id===fid;});
+  if(!f)return;
+  if(f.stock<qty){alert('Niewystarczający stan!\nDostępne: '+f.stock.toFixed(1)+' kg');return;}
+  var now=new Date();
+  var time=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
   f.stock=Math.round((f.stock-qty)*100)/100;
-  S.sales.push({id:S.ns++,date,time,seller,fid,qty,price,tot:Math.round(qty*price*100)/100,note});
+  S.sales.push({id:S.ns++,date:date,time:time,seller:seller,fid:fid,qty:qty,price:price,tot:Math.round(qty*price*100)/100,note:note});
   document.getElementById('sl-qty').value='';
   document.getElementById('sl-note').value='';
   rSales();
   showLoading('Zapisuję sprzedaż…');
-  try { await Promise.all([writeSheet('sales',salesToRows()), writeSheet('flavors',flavorsToRows())]); } catch(e) { alert('Błąd: '+e.message); }
+  try{await Promise.all([apiWrite('sales',sa2rows()),apiWrite('flavors',fl2rows())]);}catch(e){alert('Błąd: '+e.message);}
   hideLoading();
 }
 
 async function delSale(id){
-  if(!confirm('Usunąć ten wpis sprzedaży?')) return;
-  const s=S.sales.find(x=>x.id===id);
-  if(!s) return;
-  const f=S.flavors.find(x=>x.id===s.fid);
-  if(f) f.stock=Math.round((f.stock+s.qty)*100)/100;
-  S.sales=S.sales.filter(x=>x.id!==id);
+  if(!confirm('Usunąć ten wpis?'))return;
+  var s=S.sales.find(function(x){return x.id===id;});
+  if(!s)return;
+  var f=S.flavors.find(function(x){return x.id===s.fid;});
+  if(f)f.stock=Math.round((f.stock+s.qty)*100)/100;
+  S.sales=S.sales.filter(function(x){return x.id!==id;});
   rSales();
-  showLoading('Usuwam…');
-  try { await Promise.all([writeSheet('sales',salesToRows()), writeSheet('flavors',flavorsToRows())]); } catch(e) { alert('Błąd: '+e.message); }
-  hideLoading();
+  showLoading('Usuwam…');try{await Promise.all([apiWrite('sales',sa2rows()),apiWrite('flavors',fl2rows())]);}catch(e){alert('Błąd: '+e.message);}hideLoading();
 }
 
 function rSales(){
   rSelects();
-  const ts=S.sales.filter(s=>s.date===TD);
-  const totD=ts.reduce((s,x)=>s+x.tot,0);
-  const totAll=S.sales.reduce((s,x)=>s+x.tot,0);
-  const totQty=S.sales.reduce((s,x)=>s+x.qty,0);
-  document.getElementById('sl-met').innerHTML=`
-    <div class="met"><div class="l">Przychód dziś</div><div class="v" style="color:var(--green)">${f2(totD)}</div><div class="s">${ts.length} transakcji</div></div>
-    <div class="met"><div class="l">Przychód łącznie</div><div class="v">${f2(totAll)}</div></div>
-    <div class="met"><div class="l">Sprzedano łącznie</div><div class="v">${totQty.toFixed(1)} kg</div></div>
-    <div class="met"><div class="l">Transakcji łącznie</div><div class="v">${S.sales.length}</div></div>`;
-  const tb=document.getElementById('sl-today');
-  tb.innerHTML=ts.length?[...ts].reverse().map(s=>`<tr>
-    <td>${s.time}</td><td>${sName(s.seller)}</td>
-    <td><span class="dot" style="background:${fColor(s.fid)}"></span>${fName(s.fid)}</td>
-    <td>${s.qty} kg</td><td>${f2(s.price)}</td>
-    <td style="font-weight:600;color:var(--green)">${f2(s.tot)}</td>
-    <td style="color:var(--text3);font-size:12px">${s.note||'—'}</td>
-    <td><button class="btn btn-r" onclick="delSale(${s.id})">✕</button></td>
-  </tr>`).join(''):'<tr><td colspan="8" class="empty">Brak sprzedaży dzisiaj</td></tr>';
-  const bf={};S.sales.forEach(s=>{if(!bf[s.fid])bf[s.fid]={q:0,t:0};bf[s.fid].q+=s.qty;bf[s.fid].t+=s.tot});
-  const mfq=Math.max(...Object.values(bf).map(x=>x.q),0.01);
-  document.getElementById('fl-stat').innerHTML=Object.entries(bf).length?Object.entries(bf).sort((a,b)=>b[1].q-a[1].q).map(([fid,v])=>`
-    <div style="margin-bottom:.6rem"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:2px">
-      <span><span class="dot" style="background:${fColor(fid)}"></span><b>${fName(fid)}</b></span>
-      <span>${v.q.toFixed(1)} kg &nbsp;<b>${f2(v.t)}</b></span></div>
-      <div class="bar"><div class="bfill" style="width:${Math.round(v.q/mfq*100)}%;background:${fColor(fid)}"></div></div>
-    </div>`).join(''):'<div class="empty">Brak danych</div>';
-  const bs={};S.sales.forEach(s=>{if(!bs[s.seller])bs[s.seller]={q:0,t:0};bs[s.seller].q+=s.qty;bs[s.seller].t+=s.tot});
-  const mst=Math.max(...Object.values(bs).map(x=>x.t),0.01);
-  document.getElementById('se-stat').innerHTML=Object.entries(bs).length?Object.entries(bs).sort((a,b)=>b[1].t-a[1].t).map(([sid,v])=>`
-    <div style="margin-bottom:.6rem"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:2px">
-      <span><b>${sName(sid)}</b></span><span>${v.q.toFixed(1)} kg &nbsp;<b>${f2(v.t)}</b></span></div>
-      <div class="bar"><div class="bfill" style="width:${Math.round(v.t/mst*100)}%;background:var(--blue)"></div></div>
-    </div>`).join(''):'<div class="empty">Brak danych</div>';
-  const bd={};S.sales.forEach(s=>{if(!bd[s.date])bd[s.date]={r:0,q:0,c:0};bd[s.date].r+=s.tot;bd[s.date].q+=s.qty;bd[s.date].c++});
-  document.getElementById('daily-hist').innerHTML=Object.entries(bd).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,20).map(([d,v])=>`<tr>
-    <td>${fD(d)}</td><td>${v.c}</td><td>${v.q.toFixed(1)} kg</td>
-    <td style="font-weight:600;color:var(--green)">${f2(v.r)}</td></tr>`).join('')||'<tr><td colspan="4" class="empty">Brak danych</td></tr>';
+  var ts=S.sales.filter(function(s){return s.date===TD;});
+  var totD=ts.reduce(function(s,x){return s+x.tot;},0);
+  var totAll=S.sales.reduce(function(s,x){return s+x.tot;},0);
+  var totQty=S.sales.reduce(function(s,x){return s+x.qty;},0);
+  document.getElementById('sl-met').innerHTML=
+    '<div class="met"><div class="l">Przychód dziś</div><div class="v" style="color:var(--green)">'+f2(totD)+'</div><div class="s">'+ts.length+' transakcji</div></div>'+
+    '<div class="met"><div class="l">Przychód łącznie</div><div class="v">'+f2(totAll)+'</div></div>'+
+    '<div class="met"><div class="l">Sprzedano łącznie</div><div class="v">'+totQty.toFixed(1)+' kg</div></div>'+
+    '<div class="met"><div class="l">Transakcji łącznie</div><div class="v">'+S.sales.length+'</div></div>';
+  var tb=document.getElementById('sl-today');
+  var rev=[].concat(ts).reverse();
+  tb.innerHTML=rev.length?rev.map(function(s){
+    return '<tr><td>'+s.time+'</td><td>'+sName(s.seller)+'</td>'+
+      '<td><span class="dot" style="background:'+fColor(s.fid)+'"></span>'+fName(s.fid)+'</td>'+
+      '<td>'+s.qty+' kg</td><td>'+f2(s.price)+'</td>'+
+      '<td style="font-weight:600;color:var(--green)">'+f2(s.tot)+'</td>'+
+      '<td style="color:var(--text3);font-size:12px">'+(s.note||'—')+'</td>'+
+      '<td><button class="btn btn-r" onclick="delSale('+s.id+')">✕</button></td></tr>';
+  }).join(''):'<tr><td colspan="8" class="empty">Brak sprzedaży dzisiaj</td></tr>';
+
+  var bf={};S.sales.forEach(function(s){if(!bf[s.fid])bf[s.fid]={q:0,t:0};bf[s.fid].q+=s.qty;bf[s.fid].t+=s.tot;});
+  var mfq=Math.max.apply(null,Object.values(bf).map(function(x){return x.q;}).concat([0.01]));
+  document.getElementById('fl-stat').innerHTML=Object.keys(bf).length?Object.entries(bf).sort(function(a,b){return b[1].q-a[1].q;}).map(function(e){
+    var fid=e[0],v=e[1];
+    return '<div style="margin-bottom:.6rem"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:2px">'+
+      '<span><span class="dot" style="background:'+fColor(fid)+'"></span><b>'+fName(fid)+'</b></span>'+
+      '<span>'+v.q.toFixed(1)+' kg &nbsp;<b>'+f2(v.t)+'</b></span></div>'+
+      '<div class="bar"><div class="bfill" style="width:'+Math.round(v.q/mfq*100)+'%;background:'+fColor(fid)+'"></div></div></div>';
+  }).join(''):'<div class="empty">Brak danych</div>';
+
+  var bs={};S.sales.forEach(function(s){if(!bs[s.seller])bs[s.seller]={q:0,t:0};bs[s.seller].q+=s.qty;bs[s.seller].t+=s.tot;});
+  var mst=Math.max.apply(null,Object.values(bs).map(function(x){return x.t;}).concat([0.01]));
+  document.getElementById('se-stat').innerHTML=Object.keys(bs).length?Object.entries(bs).sort(function(a,b){return b[1].t-a[1].t;}).map(function(e){
+    var sid=e[0],v=e[1];
+    return '<div style="margin-bottom:.6rem"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:2px">'+
+      '<span><b>'+sName(sid)+'</b></span><span>'+v.q.toFixed(1)+' kg &nbsp;<b>'+f2(v.t)+'</b></span></div>'+
+      '<div class="bar"><div class="bfill" style="width:'+Math.round(v.t/mst*100)+'%;background:var(--blue)"></div></div></div>';
+  }).join(''):'<div class="empty">Brak danych</div>';
+
+  var bd={};S.sales.forEach(function(s){if(!bd[s.date])bd[s.date]={r:0,q:0,c:0};bd[s.date].r+=s.tot;bd[s.date].q+=s.qty;bd[s.date].c++;});
+  document.getElementById('daily-hist').innerHTML=Object.entries(bd).sort(function(a,b){return b[0].localeCompare(a[0]);}).slice(0,20).map(function(e){
+    var d=e[0],v=e[1];
+    return '<tr><td>'+fD(d)+'</td><td>'+v.c+'</td><td>'+v.q.toFixed(1)+' kg</td><td style="font-weight:600;color:var(--green)">'+f2(v.r)+'</td></tr>';
+  }).join('')||'<tr><td colspan="4" class="empty">Brak danych</td></tr>';
 }
 
 // ============================================================
 // PRACOWNICY
 // ============================================================
 async function addEmp(){
-  const n=document.getElementById('e-name').value.trim();
-  const r=+document.getElementById('e-rate').value;
-  if(!n||!r){alert('Podaj imię i stawkę godzinową');return}
+  var n=document.getElementById('e-name').value.trim();
+  var r=+document.getElementById('e-rate').value;
+  if(!n||!r){alert('Podaj imię i stawkę');return;}
   S.employees.push({id:S.ne++,name:n,rate:r});
   document.getElementById('e-name').value='';
   document.getElementById('e-rate').value='';
-  showLoading('Zapisuję pracownika…');
-  try { await writeSheet('employees',employeesToRows()); } catch(e) { alert('Błąd: '+e.message); }
-  hideLoading();
+  showLoading('Zapisuję…');try{await apiWrite('employees',em2rows());}catch(e){alert('Błąd: '+e.message);}hideLoading();
   rEmps();rSelects();
 }
 
 async function addWork(){
-  const eid=+document.getElementById('w-emp').value;
-  const date=document.getElementById('w-date').value||TD;
-  const fr=document.getElementById('w-from').value;
-  const to=document.getElementById('w-to').value;
-  if(!eid||!fr||!to){alert('Uzupełnij wszystkie pola');return}
-  const[fh,fm]=fr.split(':').map(Number);
-  const[th,tm]=to.split(':').map(Number);
-  const h=Math.round((th*60+tm-fh*60-fm)/60*100)/100;
-  if(h<=0){alert('Czas zakończenia musi być późniejszy niż rozpoczęcia');return}
-  S.works.push({id:S.nw++,eid,date,fr,to,h});
+  var eid=+document.getElementById('w-emp').value;
+  var date=document.getElementById('w-date').value||TD;
+  var fr=document.getElementById('w-from').value;
+  var to=document.getElementById('w-to').value;
+  if(!eid||!fr||!to){alert('Uzupełnij wszystkie pola');return;}
+  var fh=+fr.split(':')[0],fm=+fr.split(':')[1],th=+to.split(':')[0],tm=+to.split(':')[1];
+  var h=Math.round((th*60+tm-fh*60-fm)/60*100)/100;
+  if(h<=0){alert('Czas zakończenia musi być późniejszy');return;}
+  S.works.push({id:S.nw++,eid:eid,date:date,fr:fr,to:to,h:h});
   document.getElementById('w-from').value='';
   document.getElementById('w-to').value='';
-  showLoading('Zapisuję czas pracy…');
-  try { await writeSheet('works',worksToRows()); } catch(e) { alert('Błąd: '+e.message); }
-  hideLoading();
+  showLoading('Zapisuję…');try{await apiWrite('works',wo2rows());}catch(e){alert('Błąd: '+e.message);}hideLoading();
   rEmps();
 }
 
 async function remWork(id){
-  if(!confirm('Usunąć ten wpis?')) return;
-  S.works=S.works.filter(x=>x.id!==id);
-  showLoading('Usuwam…');
-  try { await writeSheet('works',worksToRows()); } catch(e) { alert('Błąd: '+e.message); }
-  hideLoading();
-  rEmps();
+  if(!confirm('Usunąć?'))return;
+  S.works=S.works.filter(function(x){return x.id!==id;});
+  showLoading('Usuwam…');try{await apiWrite('works',wo2rows());}catch(e){alert('Błąd: '+e.message);}hideLoading();rEmps();
 }
 
 async function remEmp(id){
-  if(!confirm('Usunąć pracownika? Zostaną usunięte też jego wpisy czasu pracy.')) return;
-  S.employees=S.employees.filter(x=>x.id!==id);
-  S.works=S.works.filter(x=>x.eid!==id);
-  showLoading('Usuwam pracownika…');
-  try { await Promise.all([writeSheet('employees',employeesToRows()), writeSheet('works',worksToRows())]); } catch(e) { alert('Błąd: '+e.message); }
-  hideLoading();
-  rEmps();rSelects();
+  if(!confirm('Usunąć pracownika?'))return;
+  S.employees=S.employees.filter(function(x){return x.id!==id;});
+  S.works=S.works.filter(function(x){return x.eid!==id;});
+  showLoading('Usuwam…');
+  try{await Promise.all([apiWrite('employees',em2rows()),apiWrite('works',wo2rows())]);}catch(e){alert('Błąd: '+e.message);}
+  hideLoading();rEmps();rSelects();
 }
 
 function rEmps(){
-  const mk=mKey();
-  document.getElementById('e-body').innerHTML=S.employees.length?S.employees.map(e=>{
-    const ws=S.works.filter(w=>w.eid===e.id);
-    const mw=ws.filter(w=>w.date.startsWith(mk));
-    const mh=Math.round(mw.reduce((s,w)=>s+w.h,0)*100)/100;
-    const th=Math.round(ws.reduce((s,w)=>s+w.h,0)*100)/100;
-    return `<tr><td><b>${e.name}</b></td><td>${f2(e.rate)}/h</td><td>${mh.toFixed(1)} h</td>
-      <td style="font-weight:600;color:var(--red)">${f2(mh*e.rate)}</td>
-      <td>${th.toFixed(1)} h</td><td style="font-weight:600">${f2(th*e.rate)}</td>
-      <td><button class="btn btn-r" onclick="remEmp(${e.id})">Usuń</button></td></tr>`;
+  var mk=mKey();
+  document.getElementById('e-body').innerHTML=S.employees.length?S.employees.map(function(e){
+    var ws=S.works.filter(function(w){return w.eid===e.id;});
+    var mw=ws.filter(function(w){return w.date.startsWith(mk);});
+    var mh=Math.round(mw.reduce(function(s,w){return s+w.h;},0)*100)/100;
+    var th=Math.round(ws.reduce(function(s,w){return s+w.h;},0)*100)/100;
+    return '<tr><td><b>'+e.name+'</b></td><td>'+f2(e.rate)+'/h</td><td>'+mh.toFixed(1)+' h</td>'+
+      '<td style="font-weight:600;color:var(--red)">'+f2(mh*e.rate)+'</td>'+
+      '<td>'+th.toFixed(1)+' h</td><td style="font-weight:600">'+f2(th*e.rate)+'</td>'+
+      '<td><button class="btn btn-r" onclick="remEmp('+e.id+')">Usuń</button></td></tr>';
   }).join(''):'<tr><td colspan="7" class="empty">Brak pracowników</td></tr>';
-  const ws=[...S.works].sort((a,b)=>b.date.localeCompare(a.date));
-  document.getElementById('w-body').innerHTML=ws.length?ws.slice(0,30).map(w=>{
-    const e=S.employees.find(x=>x.id===w.eid);
-    return `<tr><td>${fD(w.date)}</td><td>${e?e.name:'—'}</td><td>${w.fr}</td><td>${w.to}</td>
-      <td>${w.h.toFixed(1)} h</td><td>${e?f2(w.h*e.rate):'—'}</td>
-      <td><button class="btn btn-r" onclick="remWork(${w.id})">✕</button></td></tr>`;
-  }).join(''):'<tr><td colspan="7" class="empty">Brak wpisów czasu pracy</td></tr>';
+
+  var ws2=[].concat(S.works).sort(function(a,b){return b.date.localeCompare(a.date);});
+  document.getElementById('w-body').innerHTML=ws2.length?ws2.slice(0,30).map(function(w){
+    var e=S.employees.find(function(x){return x.id===w.eid;});
+    return '<tr><td>'+fD(w.date)+'</td><td>'+(e?e.name:'—')+'</td><td>'+w.fr+'</td><td>'+w.to+'</td>'+
+      '<td>'+w.h.toFixed(1)+' h</td><td>'+(e?f2(w.h*e.rate):'—')+'</td>'+
+      '<td><button class="btn btn-r" onclick="remWork('+w.id+')">✕</button></td></tr>';
+  }).join(''):'<tr><td colspan="7" class="empty">Brak wpisów</td></tr>';
 }
 
 // ============================================================
 // WYNIKI
 // ============================================================
 function rSummary(){
-  const rev=S.sales.reduce((s,x)=>s+x.tot,0);
-  const dCost=S.deliveries.reduce((s,x)=>s+x.tot,0);
-  const mk=mKey();
-  const monthWorks=S.works.filter(w=>w.date.startsWith(mk));
-  const labor=Math.round(monthWorks.reduce((s,w)=>{const e=S.employees.find(x=>x.id===w.eid);return s+(e?w.h*e.rate:0);},0)*100)/100;
-  const totalLabor=Math.round(S.works.reduce((s,w)=>{const e=S.employees.find(x=>x.id===w.eid);return s+(e?w.h*e.rate:0);},0)*100)/100;
-  const totCost=dCost+labor;
-  const profit=rev-totCost;
-  const margin=rev?Math.round(profit/rev*1000)/10:0;
-  document.getElementById('su-met').innerHTML=`
-    <div class="met"><div class="l">Przychód łącznie</div><div class="v" style="color:var(--green)">${f2(rev)}</div></div>
-    <div class="met"><div class="l">Koszty łącznie</div><div class="v" style="color:var(--red)">${f2(totCost)}</div><div class="s">dostawa + praca (mies.)</div></div>
-    <div class="met"><div class="l">Zysk / Strata</div><div class="v" style="color:${profit>=0?'var(--green)':'var(--red)'}">${f2(profit)}</div></div>
-    <div class="met"><div class="l">Marża brutto</div><div class="v">${margin}%</div></div>`;
-  document.getElementById('su-costs').innerHTML=`
-    <div style="padding:.5rem 0;border-bottom:1px solid var(--border2)"><div style="display:flex;justify-content:space-between;font-size:13px">
-      <span>📦 Dostawy</span><span style="font-weight:600">${f2(dCost)}</span></div>
-      <div style="font-size:11px;color:var(--text3)">${S.deliveries.length} dostaw(y)</div></div>
-    <div style="padding:.5rem 0;border-bottom:1px solid var(--border2)"><div style="display:flex;justify-content:space-between;font-size:13px">
-      <span>👥 Wynagrodzenia (ten mies.)</span><span style="font-weight:600">${f2(labor)}</span></div></div>
-    <div style="padding:.5rem 0;border-bottom:1px solid var(--border2)"><div style="display:flex;justify-content:space-between;font-size:13px">
-      <span>👥 Wynagrodzenia (łącznie)</span><span style="font-weight:600">${f2(totalLabor)}</span></div></div>
-    <div style="padding:.5rem 0;display:flex;justify-content:space-between;font-size:14px;font-weight:600">
-      <span>Łącznie koszty</span><span style="color:var(--red)">${f2(totCost)}</span></div>`;
-  const recent=[...S.sales.map(x=>({...x,_t:'sale'})),...S.deliveries.map(x=>({...x,_t:'del'}))].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);
-  document.getElementById('su-tx').innerHTML=recent.length?recent.map(tx=>tx._t==='del'?`
-    <div style="display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--border2);font-size:12px">
-      <span><span class="tag ta">dostawa</span> <b>${tx.sup}</b> <span style="color:var(--text3)">${fD(tx.date)}</span></span>
-      <span style="color:var(--red);font-weight:600">-${f2(tx.tot)}</span></div>`:`
-    <div style="display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--border2);font-size:12px">
-      <span><span class="tag tg">sprzedaż</span> <span class="dot" style="background:${fColor(tx.fid)}"></span>${fName(tx.fid)} ${tx.qty}kg</span>
-      <span style="color:var(--green);font-weight:600">+${f2(tx.tot)}</span></div>`).join(''):'<div class="empty">Brak transakcji</div>';
-  const bd={};S.sales.forEach(s=>{if(!bd[s.date])bd[s.date]={r:0,q:0,c:0};bd[s.date].r+=s.tot;bd[s.date].q+=s.qty;bd[s.date].c++});
-  const dDC={};S.deliveries.forEach(d=>{if(!dDC[d.date])dDC[d.date]=0;dDC[d.date]+=d.tot});
-  const dLC={};S.works.forEach(w=>{const e=S.employees.find(x=>x.id===w.eid);if(!e)return;if(!dLC[w.date])dLC[w.date]=0;dLC[w.date]+=w.h*e.rate;});
-  document.getElementById('su-daily').innerHTML=Object.entries(bd).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,10).map(([d,v])=>`<tr>
-    <td>${fD(d)}</td><td>${v.c}</td><td>${v.q.toFixed(1)} kg</td>
-    <td style="font-weight:600;color:var(--green)">${f2(v.r)}</td>
-    <td style="color:var(--red)">${dDC[d]?f2(dDC[d]):'—'}</td>
-    <td style="color:var(--red)">${dLC[d]?f2(dLC[d]):'—'}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">Brak danych</td></tr>';
+  var rev=S.sales.reduce(function(s,x){return s+x.tot;},0);
+  var dCost=S.deliveries.reduce(function(s,x){return s+x.tot;},0);
+  var mk=mKey();
+  var mw=S.works.filter(function(w){return w.date.startsWith(mk);});
+  var labor=Math.round(mw.reduce(function(s,w){var e=S.employees.find(function(x){return x.id===w.eid;});return s+(e?w.h*e.rate:0);},0)*100)/100;
+  var totalLabor=Math.round(S.works.reduce(function(s,w){var e=S.employees.find(function(x){return x.id===w.eid;});return s+(e?w.h*e.rate:0);},0)*100)/100;
+  var totCost=dCost+labor, profit=rev-totCost;
+  var margin=rev?Math.round(profit/rev*1000)/10:0;
+  document.getElementById('su-met').innerHTML=
+    '<div class="met"><div class="l">Przychód łącznie</div><div class="v" style="color:var(--green)">'+f2(rev)+'</div></div>'+
+    '<div class="met"><div class="l">Koszty łącznie</div><div class="v" style="color:var(--red)">'+f2(totCost)+'</div><div class="s">dostawa + praca</div></div>'+
+    '<div class="met"><div class="l">Zysk / Strata</div><div class="v" style="color:'+(profit>=0?'var(--green)':'var(--red)')+'">'+f2(profit)+'</div></div>'+
+    '<div class="met"><div class="l">Marża brutto</div><div class="v">'+margin+'%</div></div>';
+  document.getElementById('su-costs').innerHTML=
+    '<div style="padding:.5rem 0;border-bottom:1px solid var(--border2)"><div style="display:flex;justify-content:space-between;font-size:13px"><span>📦 Dostawy</span><span style="font-weight:600">'+f2(dCost)+'</span></div></div>'+
+    '<div style="padding:.5rem 0;border-bottom:1px solid var(--border2)"><div style="display:flex;justify-content:space-between;font-size:13px"><span>👥 Wynagrodzenia (ten mies.)</span><span style="font-weight:600">'+f2(labor)+'</span></div></div>'+
+    '<div style="padding:.5rem 0;border-bottom:1px solid var(--border2)"><div style="display:flex;justify-content:space-between;font-size:13px"><span>👥 Wynagrodzenia (łącznie)</span><span style="font-weight:600">'+f2(totalLabor)+'</span></div></div>'+
+    '<div style="padding:.5rem 0;display:flex;justify-content:space-between;font-size:14px;font-weight:600"><span>Łącznie koszty</span><span style="color:var(--red)">'+f2(totCost)+'</span></div>';
+  var recent=[].concat(S.sales.map(function(x){return Object.assign({},x,{_t:'sale'});}),
+    S.deliveries.map(function(x){return Object.assign({},x,{_t:'del'});})).sort(function(a,b){return b.date.localeCompare(a.date);}).slice(0,10);
+  document.getElementById('su-tx').innerHTML=recent.length?recent.map(function(tx){
+    return tx._t==='del'?
+      '<div style="display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--border2);font-size:12px">'+
+      '<span><span class="tag ta">dostawa</span> <b>'+tx.sup+'</b> <span style="color:var(--text3)">'+fD(tx.date)+'</span></span>'+
+      '<span style="color:var(--red);font-weight:600">-'+f2(tx.tot)+'</span></div>':
+      '<div style="display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--border2);font-size:12px">'+
+      '<span><span class="tag tg">sprzedaż</span> <span class="dot" style="background:'+fColor(tx.fid)+'"></span>'+fName(tx.fid)+' '+tx.qty+'kg</span>'+
+      '<span style="color:var(--green);font-weight:600">+'+f2(tx.tot)+'</span></div>';
+  }).join(''):'<div class="empty">Brak transakcji</div>';
+  var bd={};S.sales.forEach(function(s){if(!bd[s.date])bd[s.date]={r:0,q:0,c:0};bd[s.date].r+=s.tot;bd[s.date].q+=s.qty;bd[s.date].c++;});
+  var dDC={};S.deliveries.forEach(function(d){if(!dDC[d.date])dDC[d.date]=0;dDC[d.date]+=d.tot;});
+  var dLC={};S.works.forEach(function(w){var e=S.employees.find(function(x){return x.id===w.eid;});if(!e)return;if(!dLC[w.date])dLC[w.date]=0;dLC[w.date]+=w.h*e.rate;});
+  document.getElementById('su-daily').innerHTML=Object.entries(bd).sort(function(a,b){return b[0].localeCompare(a[0]);}).slice(0,10).map(function(e){
+    var d=e[0],v=e[1];
+    return '<tr><td>'+fD(d)+'</td><td>'+v.c+'</td><td>'+v.q.toFixed(1)+' kg</td>'+
+      '<td style="font-weight:600;color:var(--green)">'+f2(v.r)+'</td>'+
+      '<td style="color:var(--red)">'+(dDC[d]?f2(dDC[d]):'—')+'</td>'+
+      '<td style="color:var(--red)">'+(dLC[d]?f2(dLC[d]):'—')+'</td></tr>';
+  }).join('')||'<tr><td colspan="6" class="empty">Brak danych</td></tr>';
 }
 
 // ============================================================
-// INICJALIZACJA
+// INIT — uruchom od razu po załadowaniu strony
 // ============================================================
 (async function init(){
-  // Ustaw domyślne daty
-  const dateInputs = ['d-date','sl-date','w-date'];
-  dateInputs.forEach(id => { const el = document.getElementById(id); if(el) el.value = TD; });
+  if (!GAS_URL) { showSetup(); return; }
 
+  // Mamy URL — sprawdź czy jest aktywna sesja
   if (TOKEN) {
+    showLoading('Sprawdzam sesję…');
     try {
-      const data = await api({ action: 'check', token: TOKEN });
+      var data = await gasCall({action:'check', token:TOKEN});
       CURRENT_USER = data.login;
       USER_TABS    = data.tabs;
+      hideLoading();
       await startApp();
       return;
     } catch(e) {
       sessionStorage.removeItem('lod_token');
-      TOKEN = null;
+      TOKEN = '';
     }
+    hideLoading();
   }
-  // Brak sesji — zostań na ekranie logowania
+  showScreen('login-screen');
 })();
 </script>
 </body>
